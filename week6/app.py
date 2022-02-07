@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, make_response
 import os
 
 from flask_restful import Api, Resource, fields, marshal_with, reqparse
