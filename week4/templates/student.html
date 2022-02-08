@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Data</title>
+</head>
+<body>
+<h1>Student Details</h1>
+<table border="2" id="student-details-table">
+    <tr>
+        <th>Student Id</th>
+        <th>Course Id</th>
+        <th>Marks</th>
+    </tr>
+    {% for student in student_list%}
+    {% if student[0] == student_id %}
+    <tr>
+        <td>{{ student[0] }}</td>
+        <td>{{ student[1] }}</td>
+        <td>{{ student[2] }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    <tr>
+        <td colspan="2" style="text-align:center"> Total Marks</td>
+        <td>{{ total }}</td>
+    </tr>
+</table>
+<a href="/">Go Back</a>
+</body>
+</html>
