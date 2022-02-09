@@ -287,4 +287,4 @@ api.add_resource(EnrollmentApi, '/api/student/<int:student_id>/course', '/api/st
                                                                         ':course_id>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
