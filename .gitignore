@@ -127,4 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/week6/.idea
+*.idea*
+*.zip
