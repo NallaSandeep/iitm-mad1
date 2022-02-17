@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+<div style="text-align:right;">
+<a href="/">Go to Students</a>
+</div>
+<h1>Courses list</h1>
+{% if courses is defined and courses|length > 0 %}
+<table id = "all-courses">
+<tr>
+<th>SNo</th>
+<th>Course Code</th>
+<th>Course Name</th>
+<th>Course Description</th>
+<th>Actions</th>
+</tr>
+        {% for course in courses%}
+            <tr>
+            <td>{{ course['course_id'] }}</td>
+            <td><a href="/course/{{ course['course_id'] }}">{{ course['course_code'] }}</a></td>
+            <td>{{ course['course_name'] }}</td>
+            <td>{{ course['course_description'] }}</td>
+            <td>
+            <a href="/course/{{ course['course_id'] }}/update">Update</a>
+            <a href="/course/{{ course['course_id'] }}/delete">Delete</a>
+            </td>
+            </tr>
+       {% endfor %}
+</table>
+{% else %}
+    <p>No courses found. Add the courses now!</p>
+{% endif %}
+<a href="/course/create">+ Add Course</a>
+</body>
+</html>
