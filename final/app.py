@@ -19,20 +19,21 @@ def create_app():
 app = create_app()
 
 
-class Student(db.Model):
-    __tablename__ = 'student'
-    student_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    roll_number = db.Column(db.String, unique=True, nullable=False)
-    first_name = db.Column(db.String, nullable=False)
-    last_name = db.Column(db.String)
+class Tracker(db.Model):
+    __tablename__ = 'tracker'
+    id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=False)
+    settings = db.Column(db.String)
 
 
-class Course(db.Model):
-    __tablename__ = 'course'
-    course_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    course_code = db.Column(db.String, unique=True, nullable=False)
-    course_name = db.Column(db.String, nullable=False)
-    course_description = db.Column(db.String)
+class Log(db.Model):
+    __tablename__ = 'log'
+    timestamp = db.Column(db.String, primary_key=True)
+    tracker = db.Column(db.String, nullable=False)
+    value = db.Column(db.String, nullable=False)
+    note = db.Column(db.String)
 
 
 class Enrollments(db.Model):
