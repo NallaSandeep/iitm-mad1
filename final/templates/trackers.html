@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Details</title>
+    <script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "www.google.com";
+    };
+</script>
+</head>
+<body>
+<h1>Hello User</h1>
+<div style="text-align:center;">
+<a href="/logout">logout</a>
+</div>
+<table id = "tracker-table">
+<thead>
+<th>Tracker</th>
+<th>Last tracked</th>
+<th></th>
+<th></th>
+</thead>
+<tbody>
+<tr>
+    <td><a href="">test</a></td>
+<td>123</td>
+    <td><a href="/">Add Event</a></td>
+    <td>
+<select name="action" id="action">
+  <option value="default" selected disabled hidden>Action</option>
+  <option value="edit">Edit</option>
+  <option value="delete">Delete</option>
+</select>
+    </td>
+</tr>
+</tbody>
+</table>
+<button id="myButton" class="float-left submit-button" >Add Tracker</button>
+
+
+</body>
+</html>

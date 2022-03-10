@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details</title>
+</head>
+<body>
+<h1>Hello User</h1>
+<div style="text-align:center;">
+<a href="/logout">logout</a>
+</div>
+<h2> - Tracker</h2>
+<div id="tracking-graph">
+<select name="period" id="period">
+  <option value="default" selected disabled hidden>Period</option>
+  <option value="day">Today</option>
+  <option value="week">This week</option>
+    <option value="month">This month</option>
+</select>
+</div>
+<h2>Logs</h2>
+<table id = "tracker-logs">
+<thead>
+<th>On</th>
+<th>Value</th>
+<th></th>
+<th></th>
+</thead>
+<tbody>
+<tr>
+    <td>test</td>
+<td>123</td>
+    <td>Add Event</td>
+    <td>
+<select name="action" id="action">
+  <option value="default" selected disabled hidden>Action</option>
+  <option value="edit">Edit</option>
+  <option value="delete">Delete</option>
+</select>
+    </td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

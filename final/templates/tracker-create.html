@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>div{margin: 10px;}</style>
+    <meta charset="UTF-8">
+    <title>Add Course</title>
+</head>
+<body>
+<h1>Hello User</h1>
+<div style="text-align:center;">
+<a href="/logout">logout</a>
+</div>
+<h2>Add Tracker</h2>
+<form action="/course/create" method="POST" id="create-tracker-form">
+<div>
+<label>Name</label>
+<input type="text" name="name" required />
+</div>
+<div>
+<label>Description</label>
+<input type="text" name="desc" required />
+</div>
+<div>
+<label>Tracker Type</label>
+<select name="type" id="type">
+  <option value="default" selected disabled hidden>Type</option>
+  <option value="numeric">Numerical</option>
+  <option value="choice">Multiple Choice</option>
+</select>
+</div>
+<div>
+<label>Settings</label>
+<input type="text" name="settings" />
+</div>
+<div>
+<input type="submit" value = "Log it">
+</div>
+</form>
+</body>
+</html>
