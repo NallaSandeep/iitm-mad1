@@ -1,10 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import os
+from flask_restful import Api, Resource, fields, marshal_with, reqparse
+from flask_restful.representations import json
+from werkzeug.exceptions import HTTPException
 
 from flask_sqlalchemy import SQLAlchemy
 
 app = None
+api = None
 db = SQLAlchemy()
+
+# TODO
+# P1:
+# APIs for interaction with trackers and logs - P1
+# ○ Additional APIs for getting stats, trend lines or add other features
+#
+# ● Validation - P1
+# ○ All form inputs fields - text, numbers etc. with suitable messages
+#
+# P2
+# Graphs & Trendlines - P2
+#
+# P3
+# Timestamp - 2022-05-26T11:42:00.73+05:30 - P3
+# The current timestamp needs to be picked up automatically - P3
+# Format of Time of last view (Today, Yesterday or Three months ago) - P2
+# Bootstrap usage - P3
+#
 
 
 def create_app():
@@ -12,11 +34,13 @@ def create_app():
     app = Flask(__name__, template_folder='templates')
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(current_dir, 'tracker-db.db')
     db.init_app(app)
+    api = Api(app)
     app.app_context().push()
-    return app
+    return app, api
 
 
-app = create_app()
+app, api = create_app()
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -40,6 +64,46 @@ class Log(db.Model):
     tracker = db.Column(db.Integer, db.ForeignKey('tracker.id'), nullable=False)
     value = db.Column(db.String, nullable=False)
     note = db.Column(db.String)
+
+
+tracker_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'description': fields.String,
+    'type': fields.String,
+    'settings': fields.String
+}
+
+log_fields = {
+    'id': fields.Integer,
+    'timestamp': fields.String,
+    'tracker': fields.Integer,
+    'value': fields.String,
+    'note': fields.String
+}
+
+create_tracking_parser = reqparse.RequestParser()
+create_tracking_parser.add_argument('name')
+create_tracking_parser.add_argument('description')
+create_tracking_parser.add_argument('type')
+create_tracking_parser.add_argument('settings')
+
+create_log_parser = reqparse.RequestParser()
+create_log_parser.add_argument('timestamp')
+create_log_parser.add_argument('tracker')
+create_log_parser.add_argument('value')
+create_log_parser.add_argument('note')
+
+
+class BusinessValidationError(HTTPException):
+    def __init__(self, status_code, error_code, error_message):
+        error_json = {"error_code": error_code, 'error_message': error_message}
+        self.response = make_response(json.dumps(error_json), status_code)
+
+
+class InputValidationError(HTTPException):
+    def __init__(self, status_code, error_message):
+        self.response = make_response(error_message, status_code)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -103,6 +167,7 @@ def trackers_update(tracker_id):
 @app.route("/tracker/<string:tracker_id>/delete")
 def trackers_delete(tracker_id):
     Tracker.query.filter_by(id=tracker_id).delete()
+    Log.query.filter_by(tracker=tracker_id).delete()
     db.session.commit()
     return redirect(url_for('trackers_page'))
 
@@ -161,126 +226,148 @@ def logout():
     return res
 
 
-# @app.route("/student/create", methods=["GET", "POST"])
-# def create():
-#     if request.form:
-#         roll=request.form['roll']
-#         fname=request.form['f_name']
-#         lname=request.form['l_name']
-#         missing=Student.query.filter_by(roll_number=roll).first()
-#         if missing is None:
-#             s=Student(roll_number=roll,first_name=fname,last_name=lname)
-#             db.session.add(s)
-#             db.session.commit()
-#             return redirect(url_for('home'))
-#         else:
-#             return render_template('user-exists.html')
-#     return render_template('create.html')
-#
-#
-# @app.route("/student/<int:student_id>/update", methods=["GET", "POST"])
-# def update(student_id):
-#     if request.method == 'GET':
-#         this_student = Student.query.filter_by(student_id=student_id).first()
-#         courses = Course.query.all()
-#         return render_template('log.html', student=this_student, courses=courses)
-#
-#     elif request.method=='POST':
-#         fname=request.form['f_name']
-#         lname=request.form['l_name']
-#         course=request.form['course']
-#         s=Student.query.filter_by(student_id=student_id).update(dict(first_name=fname,last_name=lname))
-#         db.session.commit()
-#         this_course = Course.query.filter_by(course_id=course).first()
-#         cid = this_course.course_id
-#         s = Enrollments(estudent_id=student_id, ecourse_id=cid)
-#         db.session.add(s)
-#         db.session.commit()
-#         return redirect(url_for('home'))
-#
-#
-# @app.route("/student/<int:student_id>")
-# def student(student_id):
-#     student = Student.query.filter_by(student_id=student_id).first()
-#     enrolls = Enrollments.query.with_entities(Enrollments.ecourse_id).filter_by(estudent_id=student_id).all()
-#     cid = []
-#     for enroll in enrolls:
-#         cid.append(enroll[0])
-#     courses = Course.query.filter(Course.course_id.in_(cid)).all()
-#     return render_template('tracker-details.html', student=student, courses=courses)
-#
-#
-# @app.route('/student/<int:student_id>/delete')
-# def delete(student_id):
-#     Student.query.filter_by(student_id=student_id).delete()
-#     Enrollments.query.filter_by(estudent_id=student_id).delete()
-#     db.session.commit()
-#     return redirect(url_for('home'))
-#
-#
-# @app.route('/student/<int:student_id>/withdraw/<int:course_id>')
-# def withdraw(student_id, course_id):
-#     Enrollments.query.filter_by(estudent_id=student_id).filter_by(ecourse_id=course_id).delete()
-#     db.session.commit()
-#     return redirect(url_for('home'))
-#
-#
-# @app.route("/courses")
-# def courses():
-#     courses = Course.query.all()
-#     return render_template('login.html', courses=courses)
-#
-#
-# @app.route("/course/<int:course_id>", methods=["GET", "POST"])
-# def course(course_id):
-#     course = Course.query.filter_by(course_id=course_id).first()
-#     enrolls = Enrollments.query.with_entities(Enrollments.estudent_id).filter_by(ecourse_id=course_id).all()
-#     cid = []
-#     for enroll in enrolls:
-#         cid.append(enroll[0])
-#     # print(cid)
-#     students = Student.query.filter(Student.student_id.in_(cid)).all()
-#     #print(student)
-#     return render_template('trackers.html', course=course, students=students)
-#
-#
-# @app.route("/course/create", methods=["GET", "POST"])
-# def course_create():
-#     if request.form:
-#         course_description=request.form['desc']
-#         course_code=request.form['code']
-#         course_name=request.form['c_name']
-#         missing=Course.query.filter_by(course_code=course_code).first()
-#         if missing is None:
-#             s=Course(course_code=course_code,course_name=course_name,course_description=course_description)
-#             db.session.add(s)
-#             db.session.commit()
-#             return redirect(url_for('courses'))
-#         else:
-#             return render_template('course-exists.html')
-#     return render_template('tracker-create.html')
-#
-#
-# @app.route("/course/<int:course_id>/update", methods=["GET", "POST"])
-# def course_update(course_id):
-#     if request.method == 'GET':
-#         this_course = Course.query.filter_by(course_id=course_id).first()
-#         return render_template('course_update.html', course=this_course)
-#
-#     elif request.method=='POST':
-#         c_name=request.form['c_name']
-#         desc=request.form['desc']
-#         s=Course.query.filter_by(course_id=course_id).update(dict(course_name=c_name,course_description=desc))
-#         db.session.commit()
-#         return redirect(url_for('courses'))
-#
-#
-# @app.route('/course/<int:course_id>/delete')
-# def course_delete(course_id):
-#     Course.query.filter_by(course_id=course_id).delete()
-#     Enrollments.query.filter_by(ecourse_id=course_id).delete()
-#     db.session.commit()
-#     return redirect(url_for('courses'))
+class TrackerApi(Resource):
+
+    @marshal_with(tracker_fields)
+    def get(self, tracker_id):
+        user = db.session.query(Tracker).filter(Tracker.id == tracker_id).first()
+        if user:
+            return user
+        else:
+            raise InputValidationError(404, 'Course not found')
+
+    @marshal_with(tracker_fields)
+    def put(self, tracker_id):
+        args = create_tracking_parser.parse_args()
+        name = args.get('name', None)
+        description = args.get('description', None)
+        # Sandeep - Validation required on type - boolean,duration,choice,numeric
+        type = args.get('type', None)
+        settings = args.get('settings', None)
+        if name is None or name.isnumeric():
+            raise BusinessValidationError(400, 'TRACER001', 'Tracker Name is required and should be string.')
+        if description is None or description.isnumeric():
+            raise BusinessValidationError(400, 'TRACKER002', 'Tracker Description is required and should be string.')
+        if type is None or not (type=='boolean' or type == 'duration' or type == 'choice' or type == 'numeric'):
+            raise BusinessValidationError(400, 'TRACKER003', 'Tracker Type is required and should be valid.')
+        if settings.isnumeric():
+            raise BusinessValidationError(400, 'TRACKER004', 'Tracker Settings Description should be string.')
+        user_by_tracking_id = db.session.query(Tracker).filter(Tracker.id == tracker_id).first()
+        if user_by_tracking_id is None:
+            raise InputValidationError(404, 'Tracking not found')
+        user_by_tracking_id.name = name
+        user_by_tracking_id.description = description
+        user_by_tracking_id.type = type
+        user_by_tracking_id.settings = settings
+        db.session.add(user_by_tracking_id)
+        db.session.commit()
+        return user_by_tracking_id, 200
+
+    def delete(self, tracker_id):
+        user = db.session.query(Tracker).filter(Tracker.id == tracker_id).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            logs = db.session.query(Log).filter(Log.tracker == tracker_id).all()
+            if logs:
+                db.session.delete(logs)
+                db.session.commit()
+        else:
+            raise InputValidationError(404, 'Tracker not found')
+        return "Successfully Deleted", 200
+
+    @marshal_with(tracker_fields)
+    def post(self):
+        args = create_tracking_parser.parse_args()
+        name = args.get('name', None)
+        description = args.get('description', None)
+        type = args.get('type', None)
+        settings = args.get('settings', None)
+        if name is None or name.isnumeric():
+            raise BusinessValidationError(400, 'TRACER001', 'Tracker Name is required and should be string.')
+        if description is None or description.isnumeric():
+            raise BusinessValidationError(400, 'TRACKER002', 'Tracker Description is required and should be string.')
+        if type is None or not (type == 'boolean' or type == 'duration' or type == 'choice' or type == 'numeric'):
+            raise BusinessValidationError(400, 'TRACKER003', 'Tracker Type is required and should be valid.')
+        if settings.isnumeric():
+            raise BusinessValidationError(400, 'TRACKER004', 'Tracker Settings Description should be string.')
+        user_by_tracking_id = db.session.query(Tracker).filter(Tracker.name == name).first()
+        if user_by_tracking_id:
+            raise InputValidationError(409, 'Tracking Name already exist')
+        new_tracker = Tracker(name=name, description=description, type=type, settings=settings)
+        db.session.add(new_tracker)
+        db.session.commit()
+        return new_tracker, 201
+
+
+class LogApi(Resource):
+
+    @marshal_with(log_fields)
+    def get(self, tracker_id, log_id):
+        user = db.session.query(Log).filter(Log.id == log_id).first()
+        if user:
+            return user
+        else:
+            raise InputValidationError(404, 'Log not found')
+
+    @marshal_with(log_fields)
+    def put(self, tracker_id, log_id):
+        args = create_log_parser.parse_args()
+        timestamp = args.get('timestamp', None)
+        tracker = args.get('tracker', None)
+        value = args.get('value', None)
+        note = args.get('note', None)
+        user_by_log_id = db.session.query(Log).filter(Log.id == log_id).first()
+        if user_by_log_id is None:
+            raise InputValidationError(404, 'Log not found')
+        if timestamp is None:
+            raise BusinessValidationError(400, 'LOG002', 'Log timestamp is required')
+        if tracker is None or not tracker.isnumeric():
+            raise BusinessValidationError(400, 'LOG001', 'Log tracker id is required and should be String')
+        if value is None or value.isnumeric():
+            raise BusinessValidationError(400, 'LOG003', 'Log value is required and should be String')
+        if note.isnumeric():
+            raise BusinessValidationError(400, 'LOG004', 'Log note should be String')
+        user_by_log_id.timestamp = timestamp
+        user_by_log_id.tracker = tracker
+        user_by_log_id.value = value
+        user_by_log_id.note = note
+        db.session.add(user_by_log_id)
+        db.session.commit()
+        return user_by_log_id, 200
+
+    def delete(self, tracker_id, log_id):
+        user = db.session.query(Log).filter(Log.id == log_id).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+        else:
+            raise InputValidationError(404, 'Log is not found')
+        return "Successfully Deleted", 200
+
+    @marshal_with(log_fields)
+    def post(self, tracker_id):
+        args = create_log_parser.parse_args()
+        timestamp = args.get('timestamp', None)
+        tracker = args.get('tracker', None)
+        value = args.get('value', None)
+        note = args.get('note', None)
+        if timestamp is None:
+            raise BusinessValidationError(400, 'LOG002', 'Log timestamp is required')
+        if tracker is None or not tracker.isnumeric():
+            raise BusinessValidationError(400, 'LOG001', 'Log tracker id is required and should be String')
+        if value is None or value.isnumeric():
+            raise BusinessValidationError(400, 'LOG003', 'Log value is required and should be String')
+        if note.isnumeric():
+            raise BusinessValidationError(400, 'LOG004', 'Log note should be String')
+        new_log = Log(timestamp=timestamp, tracker=tracker, value=value, note=note)
+        db.session.add(new_log)
+        db.session.commit()
+        return new_log, 201
+
+
+api.add_resource(TrackerApi, '/api/tracker', '/api/tracker/<int:tracker_id>')
+api.add_resource(LogApi, '/api/tracker/<int:tracker_id>/log', '/api/tracker/<int:tracker_id>/log/<int:log_id>')
 
 
 if __name__ == '__main__':
