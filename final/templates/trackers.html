@@ -2,15 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Course Details</title>
-    <script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href = "www.google.com";
-    };
-</script>
+    <title>Trackers</title>
 </head>
 <body>
-<h1>Hello User</h1>
+<h1>Hello {{ username }}!</h1>
 <div style="text-align:center;">
 <a href="/logout">logout</a>
 </div>
@@ -22,22 +17,28 @@
 <th></th>
 </thead>
 <tbody>
+{% for tracker in trackers%}
 <tr>
-    <td><a href="">test</a></td>
-<td>123</td>
-    <td><a href="/">Add Event</a></td>
+    <td><a href="/tracker/{{ tracker['id'] }}">{{ tracker['name'] }}</a></td>
+    <td>123</td>
+    <td><a href="/tracker/{{ tracker['id'] }}/log">Add Event</a></td>
     <td>
-<select name="action" id="action">
-  <option value="default" selected disabled hidden>Action</option>
-  <option value="edit">Edit</option>
-  <option value="delete">Delete</option>
-</select>
+        <select name="action" id="action">
+          <option value="default" selected disabled hidden>Action</option>
+          <option value="edit">Edit</option>
+          <option value="delete">Delete</option>
+        </select>
     </td>
 </tr>
+{% endfor %}
 </tbody>
 </table>
 <button id="myButton" class="float-left submit-button" >Add Tracker</button>
 
-
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "/tracker/create";
+    };
+</script>
 </body>
 </html>

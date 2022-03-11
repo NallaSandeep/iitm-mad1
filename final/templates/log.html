@@ -5,18 +5,19 @@
     <title>Update Student</title>
 </head>
 <body>
-<h1>Hello User</h1>
+<h1>Hello {{ username }}!</h1>
 <div style="text-align:center;">
 <a href="/logout">logout</a>
 </div>
-<form action="/student/{{ student['student_id'] }}/update" method="POST" id="log-form">
+<h2>Log {{ tracker['name'] }}</h2>
+<form action="/tracker/{{ tracker['id'] }}/log" method="POST" id="log-form">
 <div>
 <label>When</label>
-<input type="text" name="roll" value="{{ student['roll_number'] }}" required/>
+<input type="datetime-local" name="timestamp" required/>
 </div>
 <div>
 <label>Value</label>
-<input type="text" name="f_name" value="{{ student['first_name'] }}" required />
+<input type="text" name="value" required />
 </div>
 <label for="notes">Notes</label>
 <textarea id="notes" name="notes" rows="3" cols="50"></textarea>

@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Details</title>
+    <title>{{ tracker['name'] }} Tracker Details</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+    </style>
 </head>
 <body>
-<h1>Hello User</h1>
+<h1>Hello {{ username }}!</h1>
 <div style="text-align:center;">
 <a href="/logout">logout</a>
 </div>
-<h2> - Tracker</h2>
+<h2>{{ tracker['name'] }} - Tracker</h2>
 <div id="tracking-graph">
 <select name="period" id="period">
   <option value="default" selected disabled hidden>Period</option>
@@ -26,18 +32,20 @@
 <th></th>
 </thead>
 <tbody>
+{% for log in logs%}
 <tr>
-    <td>test</td>
-<td>123</td>
-    <td>Add Event</td>
+    <td>{{ log['timestamp'] }}</td>
+    <td>{{ log['value'] }}</td>
+    <td>{{ log['note'] }}</td>
     <td>
-<select name="action" id="action">
-  <option value="default" selected disabled hidden>Action</option>
-  <option value="edit">Edit</option>
-  <option value="delete">Delete</option>
-</select>
+        <select name="action" id="action">
+          <option value="default" selected disabled hidden>Action</option>
+          <option value="edit">Edit</option>
+          <option value="delete">Delete</option>
+        </select>
     </td>
 </tr>
+{% endfor %}
 </tbody>
 </table>
 </body>

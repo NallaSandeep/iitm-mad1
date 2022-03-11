@@ -6,12 +6,12 @@
     <title>Add Course</title>
 </head>
 <body>
-<h1>Hello User</h1>
+<h1>Hello {{ username }}!</h1>
 <div style="text-align:center;">
 <a href="/logout">logout</a>
 </div>
 <h2>Add Tracker</h2>
-<form action="/course/create" method="POST" id="create-tracker-form">
+<form action="/tracker/create" method="POST" id="create-tracker-form">
 <div>
 <label>Name</label>
 <input type="text" name="name" required />
