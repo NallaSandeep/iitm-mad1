@@ -23,6 +23,7 @@ class User(db.Model):
     username = db.Column(db.String, primary_key=True)
     password = db.Column(db.String)
 
+
 class Tracker(db.Model):
     __tablename__ = 'tracker'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
@@ -34,7 +35,8 @@ class Tracker(db.Model):
 
 class Log(db.Model):
     __tablename__ = 'log'
-    timestamp = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    timestamp = db.Column(db.String, nullable=False)
     tracker = db.Column(db.Integer, db.ForeignKey('tracker.id'), nullable=False)
     value = db.Column(db.String, nullable=False)
     note = db.Column(db.String)
@@ -58,7 +60,11 @@ def login():
 @app.route("/tracker")
 def trackers_page():
     username = request.cookies.get('username')
-    trackers = Tracker.query.all()
+    latest_logs = db.session.query(
+        Log.tracker, db.func.max(Log.timestamp).label('last_tracked')
+    ).group_by(Log.tracker).subquery()
+    trackers = db.session.query(Tracker.id, Tracker.name, latest_logs.c.last_tracked).outerjoin(latest_logs, Tracker.id ==
+                                                                               latest_logs.c.tracker)
     return render_template('trackers.html', username=username, trackers=trackers)
 
 
@@ -78,6 +84,29 @@ def trackers_create():
         return redirect(url_for('trackers_page'))
 
 
+@app.route("/tracker/<string:tracker_id>/update", methods=["GET", "POST"])
+def trackers_update(tracker_id):
+    username = request.cookies.get('username')
+    if request.method == 'GET':
+        tracker = Tracker.query.filter_by(id=tracker_id).first()
+        return render_template('tracker-update.html', username=username, tracker=tracker)
+    elif request.method=='POST':
+        name=request.form['name']
+        desc=request.form['desc']
+        type=request.form['type']
+        settings=request.form['settings']
+        s = Tracker.query.filter_by(id=tracker_id).update(dict(name=name, description=desc, type=type, settings=settings))
+        db.session.commit()
+        return redirect(url_for('trackers_page'))
+
+
+@app.route("/tracker/<string:tracker_id>/delete")
+def trackers_delete(tracker_id):
+    Tracker.query.filter_by(id=tracker_id).delete()
+    db.session.commit()
+    return redirect(url_for('trackers_page'))
+
+
 @app.route("/tracker/<string:tracker_id>")
 def tracker_details_page(tracker_id):
     username = request.cookies.get('username')
@@ -94,12 +123,35 @@ def tracker_logs(tracker_id):
         return render_template('log.html', username=username, tracker=tracker)
     elif request.method=='POST':
         timestamp=request.form['timestamp']
-        value=request.form['value']
+        value=request.form.getlist('value')
         notes=request.form['notes']
-        s = Log(timestamp=timestamp, tracker=tracker_id, value=value, note=notes)
+        s = Log(timestamp=timestamp, tracker=tracker_id, value=",".join(value), note=notes)
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('trackers_page'))
+
+
+@app.route("/tracker/<int:tracker_id>/log/<int:log_id>/update", methods=["GET", "POST"])
+def log_update(tracker_id, log_id):
+    username = request.cookies.get('username')
+    if request.method == 'GET':
+        tracker = Tracker.query.filter_by(id=tracker_id).first()
+        log = Log.query.filter_by(id=log_id).first()
+        return render_template('log-update.html', username=username, tracker=tracker, log=log)
+    elif request.method=='POST':
+        timestamp = request.form['timestamp']
+        value = request.form.getlist('value')
+        notes = request.form['notes']
+        s = Log.query.filter_by(id=log_id).update(dict(timestamp=timestamp, value=",".join(value), note=notes))
+        db.session.commit()
+        return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
+
+
+@app.route("/tracker/<int:tracker_id>/log/<int:log_id>/delete")
+def log_delete(tracker_id,log_id):
+    Log.query.filter_by(id=log_id).delete()
+    db.session.commit()
+    return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 
 @app.route("/logout")

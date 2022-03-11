@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <head>
     <title>{{ tracker['name'] }} Tracker Details</title>
     <style>
@@ -16,6 +17,29 @@
 </div>
 <h2>{{ tracker['name'] }} - Tracker</h2>
 <div id="tracking-graph">
+<span id="myPlot" style="width:100%;max-width:700px"></span>
+
+<script>
+var xArray = [50,60,70,80,90,100,110,120,130,140,150];
+var yArray = [7,8,8,9,9,9,10,11,14,14,15];
+
+// Define Data
+var data = [{
+  x: xArray,
+  y: yArray,
+  mode:"lines"
+}];
+
+// Define Layout
+var layout = {
+  xaxis: {range: [40, 160], title: "Square Meters"},
+  yaxis: {range: [5, 16], title: "Price in Millions"},
+  title: "House Prices vs. Size"
+};
+
+// Display using Plotly
+Plotly.newPlot("myPlot", data, layout);
+</script>
 <select name="period" id="period">
   <option value="default" selected disabled hidden>Period</option>
   <option value="day">Today</option>
@@ -30,6 +54,7 @@
 <th>Value</th>
 <th></th>
 <th></th>
+<th></th>
 </thead>
 <tbody>
 {% for log in logs%}
@@ -37,13 +62,8 @@
     <td>{{ log['timestamp'] }}</td>
     <td>{{ log['value'] }}</td>
     <td>{{ log['note'] }}</td>
-    <td>
-        <select name="action" id="action">
-          <option value="default" selected disabled hidden>Action</option>
-          <option value="edit">Edit</option>
-          <option value="delete">Delete</option>
-        </select>
-    </td>
+    <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/update">Update</a></td>
+    <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/delete">Delete</a></td>
 </tr>
 {% endfor %}
 </tbody>

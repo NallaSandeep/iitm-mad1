@@ -82,10 +82,10 @@ $(function() {
 <a href="/logout">logout</a>
 </div>
 <h2>Log {{ tracker['name'] }}</h2>
-<form action="/tracker/{{ tracker['id'] }}/log" method="POST" id="log-form">
+<form action="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/update" method="POST" id="log-form">
 <div>
 <label>When</label>
-<input type="datetime-local" name="timestamp" required/>
+<input type="datetime-local" name="timestamp" value="{{ log['timestamp'] }}" required/>
 </div>
 <div>
 <label>Value</label>
@@ -93,23 +93,23 @@ $(function() {
         {% set list = tracker['settings'].split(',') %}
         </br>
         {% for choice in list %}
-        <input type="checkbox" name="value" value="{{ choice }}"> {{ choice }}<br>
+        <input type="checkbox" name="value" value="{{ choice }}" {% if choice in log.value%}checked='checked'{% endif %}> {{ choice }}<br>
         {% endfor %}
     {% elif tracker['type'] == 'duration'%}
-        <input type="text" name='value' class="duration"/>
+        <input type="text" name='value' value="{{ log['value'] }}" class="duration"/>
     {% elif tracker['type'] == 'boolean'%}
         <select name="value" id="value">
-          <option value="true" selected>Yes</option>
-          <option value="false">No</option>
+          <option value="true" {% if log.value=='true'%}selected='selected'{% endif %}>Yes</option>
+          <option value="false" {% if log.value=='false'%}selected='selected'{% endif %}>No</option>
         </select>
     {% elif tracker['type'] == 'numeric'%}
-        <input type="number" name='value' step='0.01'/>
+        <input type="number" name='value' step='0.01' value="{{ log['value'] }}" required/>
     {% else %}
-        <input type="text" name="value" required />
+        <input type="text" name="value" value="{{ log['value'] }} required />
     {% endif %}
 </div>
 <label for="notes">Notes</label>
-<textarea id="notes" name="notes" rows="3" cols="50"></textarea>
+<textarea id="notes" name="notes" rows="3" cols="50">{{ log['note'] }}</textarea>
 <div>
 <input type="submit" value = "Log it">
 </div>

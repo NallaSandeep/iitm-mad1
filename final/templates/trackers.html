@@ -20,15 +20,10 @@
 {% for tracker in trackers%}
 <tr>
     <td><a href="/tracker/{{ tracker['id'] }}">{{ tracker['name'] }}</a></td>
-    <td>123</td>
+    <td>{{ tracker['last_tracked'] }}</td>
     <td><a href="/tracker/{{ tracker['id'] }}/log">Add Event</a></td>
-    <td>
-        <select name="action" id="action">
-          <option value="default" selected disabled hidden>Action</option>
-          <option value="edit">Edit</option>
-          <option value="delete">Delete</option>
-        </select>
-    </td>
+    <td><a href="/tracker/{{ tracker['id'] }}/update">Edit Tracker</a></td>
+    <td><a href="/tracker/{{ tracker['id'] }}/delete">Delete Tracker</a></td>
 </tr>
 {% endfor %}
 </tbody>
