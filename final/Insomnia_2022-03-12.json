@@ -1,0 +1,300 @@
+{
+	"_type": "export",
+	"__export_format": 4,
+	"__export_date": "2022-03-11T21:21:22.334Z",
+	"__export_source": "insomnia.desktop.app:v2021.7.2",
+	"resources": [
+		{
+			"_id": "req_ea626af0ae4c4bacbe9abebc90adc632",
+			"parentId": "fld_0e4e8f0bd31247d190f227a3052ca2cf",
+			"modified": 1647030504542,
+			"created": 1647029817313,
+			"url": "{{ _.baseUrl }}/api/tracker/6",
+			"name": "Get",
+			"description": "",
+			"method": "GET",
+			"body": {},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1647029817313,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "fld_0e4e8f0bd31247d190f227a3052ca2cf",
+			"parentId": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"modified": 1647029795629,
+			"created": 1647029795629,
+			"name": "Tracker",
+			"description": "",
+			"environment": {},
+			"environmentPropertyOrder": null,
+			"metaSortKey": -1647029795629,
+			"_type": "request_group"
+		},
+		{
+			"_id": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"parentId": null,
+			"modified": 1647029776383,
+			"created": 1647029776383,
+			"name": "MAD1-Project",
+			"description": "",
+			"scope": "collection",
+			"_type": "workspace"
+		},
+		{
+			"_id": "req_d9fea2aa46eb44e8a92bc1395be198d7",
+			"parentId": "fld_0e4e8f0bd31247d190f227a3052ca2cf",
+			"modified": 1647030762169,
+			"created": 1647030062751,
+			"url": "{{ _.baseUrl }}/api/tracker",
+			"name": "Post",
+			"description": "",
+			"method": "POST",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"name\":\"Cricket\",\n\t\"description\":\"test\",\n\t\"type\":\"boolean\",\n\t\"settings\":\"\"\n}"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json",
+					"id": "pair_b56db616346e4ce280ff9e80ca96a4e0"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1645603616297.5,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "req_bd52914cf47345129b4c95e02f849de9",
+			"parentId": "fld_0e4e8f0bd31247d190f227a3052ca2cf",
+			"modified": 1647030546226,
+			"created": 1647030073277,
+			"url": "{{ _.baseUrl }}/api/tracker/6",
+			"name": "Put",
+			"description": "",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"name\":\"Writing\",\n\t\"description\":\"test\",\n\t\"type\":\"boolean\",\n\t\"settings\":\"\"\n}"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json",
+					"id": "pair_51aa3a3a4c5d4f1ebb160fa8eca788f9"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1644890515789.75,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "req_1578b82db2cf45e5a1d72646486f2a8a",
+			"parentId": "fld_0e4e8f0bd31247d190f227a3052ca2cf",
+			"modified": 1647030560991,
+			"created": 1647030082721,
+			"url": "{{ _.baseUrl }}/api/tracker/6",
+			"name": "Delete",
+			"description": "",
+			"method": "DELETE",
+			"body": {},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1644533965535.875,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "req_34bd4a1cd72e42a997f2a01fb7455109",
+			"parentId": "fld_a2d6452f36e64a25964ee781c9d9ef05",
+			"modified": 1647031032411,
+			"created": 1647030781650,
+			"url": "{{ _.baseUrl }}/api/tracker/7/log/16",
+			"name": "Get",
+			"description": "",
+			"method": "GET",
+			"body": {},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1647029817313,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "fld_a2d6452f36e64a25964ee781c9d9ef05",
+			"parentId": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"modified": 1647030781638,
+			"created": 1647030781638,
+			"name": "Log",
+			"description": "",
+			"environment": {},
+			"environmentPropertyOrder": null,
+			"metaSortKey": -1647029795579,
+			"_type": "request_group"
+		},
+		{
+			"_id": "req_049e003c5a41447886553ee6c6cc523b",
+			"parentId": "fld_a2d6452f36e64a25964ee781c9d9ef05",
+			"modified": 1647031039166,
+			"created": 1647030781669,
+			"url": "{{ _.baseUrl }}/api/tracker/7/log",
+			"name": "Post",
+			"description": "",
+			"method": "POST",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"timestamp\":\"12:34\",\n\t\"tracker\":7,\n\t\"value\":\"true\",\n\t\"note\":\"\"\n}"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json",
+					"id": "pair_b56db616346e4ce280ff9e80ca96a4e0"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1645603616297.5,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "req_91378667d815401f82ef2ad0d9e6677b",
+			"parentId": "fld_a2d6452f36e64a25964ee781c9d9ef05",
+			"modified": 1647031067467,
+			"created": 1647030781679,
+			"url": "{{ _.baseUrl }}/api/tracker/6/log/16",
+			"name": "Put",
+			"description": "",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"timestamp\":\"12:45\",\n\t\"tracker\":7,\n\t\"value\":\"false\",\n\t\"note\":\"test123\"\n}"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json",
+					"id": "pair_51aa3a3a4c5d4f1ebb160fa8eca788f9"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1644890515789.75,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "req_051986e22bc745a5a30bac4a26368e89",
+			"parentId": "fld_a2d6452f36e64a25964ee781c9d9ef05",
+			"modified": 1647031085501,
+			"created": 1647030781688,
+			"url": "{{ _.baseUrl }}/api/tracker/6/log/15",
+			"name": "Delete",
+			"description": "",
+			"method": "DELETE",
+			"body": {},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1644533965535.875,
+			"isPrivate": false,
+			"settingStoreCookies": true,
+			"settingSendCookies": true,
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingFollowRedirects": "global",
+			"_type": "request"
+		},
+		{
+			"_id": "env_a3d9cc43528f52713ffef887dc686e15c7392d54",
+			"parentId": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"modified": 1647029953430,
+			"created": 1647029776411,
+			"name": "Base Environment",
+			"data": {
+				"baseUrl": "http://localhost:5000"
+			},
+			"dataPropertyOrder": {
+				"&": [
+					"baseUrl"
+				]
+			},
+			"color": null,
+			"isPrivate": false,
+			"metaSortKey": 1647029776411,
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_a3d9cc43528f52713ffef887dc686e15c7392d54",
+			"parentId": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"modified": 1647029776422,
+			"created": 1647029776422,
+			"name": "Default Jar",
+			"cookies": [],
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "spc_94daf8b1bc704c549ee5705baace5245",
+			"parentId": "wrk_7fb3f139618a4550ae917d6e137e47de",
+			"modified": 1647029776389,
+			"created": 1647029776389,
+			"fileName": "MAD1-Project",
+			"contents": "",
+			"contentType": "yaml",
+			"_type": "api_spec"
+		}
+	]
+}

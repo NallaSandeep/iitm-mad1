@@ -19,6 +19,7 @@ db = SQLAlchemy()
 # ○ All form inputs fields - text, numbers etc. with suitable messages
 #
 # P2
+# https://www.google.com/search?q=jinja+flask+dynamic+line+chart&rlz=1C1GCEU_enIN826IN826&ei=P7orYp7eGoia4-EP28q0wAE&ved=0ahUKEwje-anV-772AhUIzTgGHVslDRgQ4dUDCA4&uact=5&oq=jinja+flask+dynamic+line+chart&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsAM6BAghEBU6BQgAEIAEOgYIABAWEB46CAgAEBYQChAeOgUIABCRAjoICCEQFhAdEB46BQghEKABOgcIIRAKEKABSgQIQRgASgQIRhgAUN8lWI6kAWDYqgFoAXABeACAAdEBiAH0JJIBBzExLjMwLjGYAQCgAQHIAQjAAQE&sclient=gws-wiz
 # Graphs & Trendlines - P2
 #
 # P3
