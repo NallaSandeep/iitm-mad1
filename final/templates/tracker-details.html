@@ -67,10 +67,10 @@
              data = [{
               x: xArray,
               y: yArray,
-              mode:"lines"
+              type:"bar"
             }];
+            layout.title= "Trend line (True=1, False=-1)"
         } else if (type=='choice') {
-             //console.log(yArray)
              settingsList=settings.split(',');
              data = [];
              settingsList.forEach(function(setting){
@@ -89,7 +89,6 @@
                       name:setting
                 });
               });
-
             layout.barmode='stack'
         } else {
              data = [{

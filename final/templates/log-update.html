@@ -81,6 +81,9 @@ $(function() {
 <div style="text-align:center;">
 <a href="/logout">logout</a>
 </div>
+<div style="text-align:left;">
+<a href="/tracker">Back to Trackers</a>
+</div>
 <h2>Log {{ tracker['name'] }}</h2>
 <form action="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/update" method="POST" id="log-form">
 <div>
@@ -99,8 +102,8 @@ $(function() {
         <input type="text" name='value' value="{{ log['value'] }}" class="duration"/>
     {% elif tracker['type'] == 'boolean'%}
         <select name="value" id="value">
-          <option value="true" {% if log.value=='true'%}selected='selected'{% endif %}>Yes</option>
-          <option value="false" {% if log.value=='false'%}selected='selected'{% endif %}>No</option>
+          <option value="1" {% if log.value=='true'%}selected='selected'{% endif %}>Yes</option>
+          <option value="-1" {% if log.value=='false'%}selected='selected'{% endif %}>No</option>
         </select>
     {% elif tracker['type'] == 'numeric'%}
         <input type="number" name='value' step='0.01' value="{{ log['value'] }}" required/>
