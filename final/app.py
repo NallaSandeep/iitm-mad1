@@ -14,24 +14,17 @@ api = None
 db = SQLAlchemy()
 
 # TODO
-# P1
-# https://www.google.com/search?q=jinja+flask+dynamic+line+chart&rlz=1C1GCEU_enIN826IN826&ei=P7orYp7eGoia4-EP28q0wAE&ved=0ahUKEwje-anV-772AhUIzTgGHVslDRgQ4dUDCA4&uact=5&oq=jinja+flask+dynamic+line+chart&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsAM6BAghEBU6BQgAEIAEOgYIABAWEB46CAgAEBYQChAeOgUIABCRAjoICCEQFhAdEB46BQghEKABOgcIIRAKEKABSgQIQRgASgQIRhgAUN8lWI6kAWDYqgFoAXABeACAAdEBiAH0JJIBBzExLjMwLjGYAQCgAQHIAQjAAQE&sclient=gws-wiz
-# Graphs & Trendlines - P1
-# P2:
-# APIs for interaction with trackers and logs - P1
-# ○ Additional APIs for getting stats, trend lines or add other features
-# API filter for logs
-#
 # ● Validation - P1
+# Integration of APIs with frontend app
 # ○ All form inputs fields - text, numbers etc. with suitable messages
-#
 #
 # P3
 # Timestamp - 2022-05-26T11:42:00.73+05:30 - P3
 # The current timestamp needs to be picked up automatically - P3
 # Format of Time of last view (Today, Yesterday or Three months ago) - P2
 # Bootstrap usage - P3
-#
+# Separate out models, controllers
+# Check if you can  implement auth functionality
 
 
 def create_app():
@@ -313,6 +306,17 @@ class TrackerApi(Resource):
         return new_tracker, 201
 
 
+class LogsApi(Resource):
+
+    @marshal_with(log_fields)
+    def get(self, tracker_id):
+        last_days = int(request.args.get('lastdays', 30))
+        filter_after = datetime.today() - timedelta(days=last_days)
+        logs = db.session.query(Log).filter(Log.tracker == tracker_id).filter(Log.timestamp >= filter_after).order_by(
+            Log.timestamp).all()
+        return logs
+
+
 class LogApi(Resource):
 
     @marshal_with(log_fields)
@@ -381,6 +385,7 @@ class LogApi(Resource):
 
 api.add_resource(TrackerApi, '/api/tracker', '/api/tracker/<int:tracker_id>')
 api.add_resource(LogApi, '/api/tracker/<int:tracker_id>/log', '/api/tracker/<int:tracker_id>/log/<int:log_id>')
+api.add_resource(LogsApi, '/api/tracker/<int:tracker_id>/logs')
 
 
 if __name__ == '__main__':
