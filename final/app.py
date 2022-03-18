@@ -179,9 +179,8 @@ def trackers_delete(tracker_id):
 
 @app.route("/tracker/<string:tracker_id>")
 def tracker_details_page(tracker_id):
-    last_days = int(request.args.get('lastdays',1))
+    last_days = int(request.args.get('lastdays',30))
     filter_after = datetime.today() - timedelta(days=last_days)
-    #payments = Payment.query.filter(Payment.due_date >= filter_after).all()
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
     logs = Log.query.filter_by(tracker=tracker_id).filter(Log.timestamp >= filter_after).order_by(Log.timestamp).all()
@@ -190,10 +189,6 @@ def tracker_details_page(tracker_id):
     for log in logs:
         timestamps.append(log.timestamp)
         values.append(log.value)
-    #print(pd.read_sql_table(table_name=Log.timestamp, con=db.session.connection(), index_col="id"))
-    # df = pd.DataFrame.from_records(logs, index='log_id', columns=['log_id','timestamp','tracker','value','note'])
-    # fig = px.bar(df.head(10),x='Timestamp',y='Value',title='Sandeep')
-    # graph = fig.to_html(full_html=False, include_plotlyjs='cdn')
     return render_template('tracker-details.html', last_days=last_days, username=username, tracker=tracker, logs=logs,
                            timestamps=timestamps, values=values)
 

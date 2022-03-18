@@ -54,23 +54,55 @@
     function redirect(tracking_id, value){
         window.location.href=tracking_id.toString().concat('?lastdays=').concat(value);
     }
-    function plot(xArray,yArray, type) {
-        console.log(type);
-        var data = [{
-          x: xArray,
-          y: yArray,
-          mode:"lines"
-        }];
+    function plot(xArray,yArray, type, settings) {
+        //console.log(type);
         // Define Layout
         var layout = {
           xaxis: {title: "Time stamp"},
           yaxis: {title: "Value"},
           title: "Trend line"
         };
+        var data;
+        if (type=='boolean') {
+             data = [{
+              x: xArray,
+              y: yArray,
+              mode:"lines"
+            }];
+        } else if (type=='choice') {
+             //console.log(yArray)
+             settingsList=settings.split(',');
+             data = [];
+             settingsList.forEach(function(setting){
+                choicesList=[]
+                yArray.forEach(function(options) {
+                    if(options.includes(setting)){
+                        choicesList.push(1);
+                    } else {
+                        choicesList.push(0);
+                    }
+                });
+                data.push({
+                      x: xArray,
+                      y: choicesList,
+                      type:"bar",
+                      name:setting
+                });
+              });
+
+            layout.barmode='stack'
+        } else {
+             data = [{
+              x: xArray,
+              y: yArray,
+              mode:"lines"
+            }];
+        }
         // Display using Plotly
+        console.log(data)
         Plotly.newPlot("myPlot", data, layout);
     }
-    plot({{ timestamps|safe }},{{ values|safe }}, '{{ tracker['type'] }}')
+    plot({{ timestamps|safe }},{{ values|safe }}, '{{ tracker['type'] }}', '{{ tracker['settings'] }}')
 </script>
 </body>
 </html>
