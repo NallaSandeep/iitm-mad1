@@ -3,12 +3,15 @@
 <head>
     <style>div{margin: 10px;}</style>
     <meta charset="UTF-8">
-    <title>Add Course</title>
+    <title>Add Tracker</title>
 </head>
 <body>
 <h1>Hello {{ username }}!</h1>
 <div style="text-align:center;">
 <a href="/logout">logout</a>
+</div>
+<div style="text-align:left;">
+<a href="/tracker">Back to Trackers</a>
 </div>
 <h2>Add Tracker</h2>
 <form action="/tracker/create" method="POST" id="create-tracker-form">

@@ -5,22 +5,26 @@ from flask_restful.representations import json
 from werkzeug.exceptions import HTTPException
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timedelta
+
+import json
 
 app = None
 api = None
 db = SQLAlchemy()
 
 # TODO
-# P1:
+# P1
+# https://www.google.com/search?q=jinja+flask+dynamic+line+chart&rlz=1C1GCEU_enIN826IN826&ei=P7orYp7eGoia4-EP28q0wAE&ved=0ahUKEwje-anV-772AhUIzTgGHVslDRgQ4dUDCA4&uact=5&oq=jinja+flask+dynamic+line+chart&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsAM6BAghEBU6BQgAEIAEOgYIABAWEB46CAgAEBYQChAeOgUIABCRAjoICCEQFhAdEB46BQghEKABOgcIIRAKEKABSgQIQRgASgQIRhgAUN8lWI6kAWDYqgFoAXABeACAAdEBiAH0JJIBBzExLjMwLjGYAQCgAQHIAQjAAQE&sclient=gws-wiz
+# Graphs & Trendlines - P1
+# P2:
 # APIs for interaction with trackers and logs - P1
 # ○ Additional APIs for getting stats, trend lines or add other features
+# API filter for logs
 #
 # ● Validation - P1
 # ○ All form inputs fields - text, numbers etc. with suitable messages
 #
-# P2
-# https://www.google.com/search?q=jinja+flask+dynamic+line+chart&rlz=1C1GCEU_enIN826IN826&ei=P7orYp7eGoia4-EP28q0wAE&ved=0ahUKEwje-anV-772AhUIzTgGHVslDRgQ4dUDCA4&uact=5&oq=jinja+flask+dynamic+line+chart&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsAM6BAghEBU6BQgAEIAEOgYIABAWEB46CAgAEBYQChAeOgUIABCRAjoICCEQFhAdEB46BQghEKABOgcIIRAKEKABSgQIQRgASgQIRhgAUN8lWI6kAWDYqgFoAXABeACAAdEBiAH0JJIBBzExLjMwLjGYAQCgAQHIAQjAAQE&sclient=gws-wiz
-# Graphs & Trendlines - P2
 #
 # P3
 # Timestamp - 2022-05-26T11:42:00.73+05:30 - P3
@@ -175,10 +179,23 @@ def trackers_delete(tracker_id):
 
 @app.route("/tracker/<string:tracker_id>")
 def tracker_details_page(tracker_id):
+    last_days = int(request.args.get('lastdays',1))
+    filter_after = datetime.today() - timedelta(days=last_days)
+    #payments = Payment.query.filter(Payment.due_date >= filter_after).all()
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
-    logs = Log.query.filter_by(tracker=tracker_id).all()
-    return render_template('tracker-details.html', username=username, tracker=tracker, logs=logs)
+    logs = Log.query.filter_by(tracker=tracker_id).filter(Log.timestamp >= filter_after).order_by(Log.timestamp).all()
+    timestamps=[]
+    values=[]
+    for log in logs:
+        timestamps.append(log.timestamp)
+        values.append(log.value)
+    #print(pd.read_sql_table(table_name=Log.timestamp, con=db.session.connection(), index_col="id"))
+    # df = pd.DataFrame.from_records(logs, index='log_id', columns=['log_id','timestamp','tracker','value','note'])
+    # fig = px.bar(df.head(10),x='Timestamp',y='Value',title='Sandeep')
+    # graph = fig.to_html(full_html=False, include_plotlyjs='cdn')
+    return render_template('tracker-details.html', last_days=last_days, username=username, tracker=tracker, logs=logs,
+                           timestamps=timestamps, values=values)
 
 
 @app.route("/tracker/<string:tracker_id>/log", methods=["GET", "POST"])
