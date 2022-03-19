@@ -23,7 +23,6 @@ db = SQLAlchemy()
 # Timestamp - 2022-05-26T11:42:00.73+05:30 - P3
 # The current timestamp needs to be picked up automatically - P3
 # Format of Time of last view (Today, Yesterday or Three months ago) - P2
-# Bootstrap usage - P3
 # Separate out models, controllers
 # Check if you can  implement auth functionality
 
@@ -103,6 +102,7 @@ class BusinessValidationError(HTTPException):
 class InputValidationError(HTTPException):
     def __init__(self, status_code, error_message):
         self.response = make_response(error_message, status_code)
+
 
 @app.route("/")
 def home():

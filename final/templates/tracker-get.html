@@ -68,7 +68,7 @@
                                     {{ username }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="logout">Logout</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
                                 </div>
                             </li>
                         </ul>
@@ -130,12 +130,6 @@
                                 <button id="logsButton" class="btn btn-primary" onclick="read_log({{ tracker['id'] }})">Logs</button>
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <script type="text/javascript">
             function update_log(tracker_id) {
                 location.href = "/trackers/" + tracker_id + "/update";
@@ -147,6 +141,12 @@
                 location.href = "/trackers/" + tracker_id + "/logs";
             };
         </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
     <!-- END fh5co-page -->
 
