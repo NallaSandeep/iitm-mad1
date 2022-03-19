@@ -17,7 +17,8 @@ db = SQLAlchemy()
 # ● Validation - P1
 # Integration of APIs with frontend app
 # ○ All form inputs fields - text, numbers etc. with suitable messages
-#
+# Login dropdown not working in log create/update screens
+# Breadcrumb is not displayed with format
 # P3
 # Timestamp - 2022-05-26T11:42:00.73+05:30 - P3
 # The current timestamp needs to be picked up automatically - P3
@@ -123,7 +124,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route("/tracker")
+@app.route("/trackers")
 def trackers_page():
     username = request.cookies.get('username')
     latest_logs = db.session.query(
@@ -131,10 +132,17 @@ def trackers_page():
     ).group_by(Log.tracker).subquery()
     trackers = db.session.query(Tracker.id, Tracker.name, latest_logs.c.last_tracked).outerjoin(latest_logs, Tracker.id ==
                                                                                latest_logs.c.tracker)
-    return render_template('trackers.html', username=username, trackers=trackers)
+    return render_template('trackers-get.html', username=username, trackers=trackers)
 
 
-@app.route("/tracker/create", methods=["GET", "POST"])
+@app.route("/trackers/<string:tracker_id>")
+def tracker_page(tracker_id):
+    username = request.cookies.get('username')
+    tracker = Tracker.query.filter_by(id=tracker_id).first()
+    return render_template('tracker-get.html', username=username, tracker=tracker)
+
+
+@app.route("/trackers/create", methods=["GET", "POST"])
 def trackers_create():
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -150,7 +158,7 @@ def trackers_create():
         return redirect(url_for('trackers_page'))
 
 
-@app.route("/tracker/<string:tracker_id>/update", methods=["GET", "POST"])
+@app.route("/trackers/<string:tracker_id>/update", methods=["GET", "POST"])
 def trackers_update(tracker_id):
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -166,7 +174,7 @@ def trackers_update(tracker_id):
         return redirect(url_for('trackers_page'))
 
 
-@app.route("/tracker/<string:tracker_id>/delete")
+@app.route("/trackers/<string:tracker_id>/delete")
 def trackers_delete(tracker_id):
     Tracker.query.filter_by(id=tracker_id).delete()
     Log.query.filter_by(tracker=tracker_id).delete()
@@ -174,7 +182,7 @@ def trackers_delete(tracker_id):
     return redirect(url_for('trackers_page'))
 
 
-@app.route("/tracker/<string:tracker_id>")
+@app.route("/trackers/<string:tracker_id>/logs")
 def tracker_details_page(tracker_id):
     last_days = int(request.args.get('lastdays',30))
     filter_after = datetime.today() - timedelta(days=last_days)
@@ -186,16 +194,24 @@ def tracker_details_page(tracker_id):
     for log in logs:
         timestamps.append(log.timestamp)
         values.append(log.value)
-    return render_template('tracker-details.html', last_days=last_days, username=username, tracker=tracker, logs=logs,
+    return render_template('logs-get.html', last_days=last_days, username=username, tracker=tracker, logs=logs,
                            timestamps=timestamps, values=values)
 
 
-@app.route("/tracker/<string:tracker_id>/log", methods=["GET", "POST"])
+@app.route("/trackers/<string:tracker_id>/logs/<int:log_id>", methods=["GET", "POST"])
+def tracker_log(tracker_id, log_id):
+    username = request.cookies.get('username')
+    tracker = Tracker.query.filter_by(id=tracker_id).first()
+    log = Log.query.filter_by(id=log_id).first()
+    return render_template('log-get.html', username=username, tracker=tracker, log=log)
+
+
+@app.route("/trackers/<string:tracker_id>/logs/create", methods=["GET", "POST"])
 def tracker_logs(tracker_id):
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
     if request.method == 'GET':
-        return render_template('log.html', username=username, tracker=tracker)
+        return render_template('log-create.html', username=username, tracker=tracker)
     elif request.method=='POST':
         timestamp=request.form['timestamp']
         value=request.form.getlist('value')
@@ -206,7 +222,7 @@ def tracker_logs(tracker_id):
         return redirect(url_for('trackers_page'))
 
 
-@app.route("/tracker/<int:tracker_id>/log/<int:log_id>/update", methods=["GET", "POST"])
+@app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/update", methods=["GET", "POST"])
 def log_update(tracker_id, log_id):
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -222,7 +238,7 @@ def log_update(tracker_id, log_id):
         return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 
-@app.route("/tracker/<int:tracker_id>/log/<int:log_id>/delete")
+@app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/delete")
 def log_delete(tracker_id,log_id):
     Log.query.filter_by(id=log_id).delete()
     db.session.commit()
@@ -387,9 +403,9 @@ class LogApi(Resource):
         return new_log, 201
 
 
-api.add_resource(TrackerApi, '/api/tracker', '/api/tracker/<int:tracker_id>')
-api.add_resource(LogApi, '/api/tracker/<int:tracker_id>/log', '/api/tracker/<int:tracker_id>/log/<int:log_id>')
-api.add_resource(LogsApi, '/api/tracker/<int:tracker_id>/logs')
+api.add_resource(TrackerApi, '/api/tracker', '/api/trackers/<int:tracker_id>')
+api.add_resource(LogApi, '/api/trackers/<int:tracker_id>/log', '/api/trackers/<int:tracker_id>/logs/<int:log_id>')
+api.add_resource(LogsApi, '/api/trackers/<int:tracker_id>/logs')
 
 
 if __name__ == '__main__':

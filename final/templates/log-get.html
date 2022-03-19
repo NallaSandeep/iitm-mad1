@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Contact Sankalp team</title>
+    <title>TrackSelf | Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
@@ -14,19 +14,19 @@
     <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'> -->
 
     <!-- Animate.css -->
-    <link rel="stylesheet" href="static/css/animate.css">
+    <link rel="stylesheet" href="../../../static/css/animate.css">
     <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="static/css/icomoon.css">
+    <link rel="stylesheet" href="../../../static/css/icomoon.css">
     <!-- Bootstrap  -->
-    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../static/css/bootstrap.css">
     <!-- Superfish -->
-    <link rel="stylesheet" href="static/css/superfish.css">
+    <link rel="stylesheet" href="../../../static/css/superfish.css">
 
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="../../../static/css/style.css">
 
 
     <!-- Modernizr JS -->
-    <script src="static/js/modernizr-2.6.2.min.js"></script>
+    <script src="../../../static/js/modernizr-2.6.2.min.js"></script>
     <script type="text/javascript" src="https://s0-azure.assets-yammer.com/assets/platform_embed.js"></script>
     <script type="text/javascript">
 		yam.connect.embedFeed({
@@ -39,7 +39,7 @@
     </script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script src="static/js/respond.min.js"></script>
+    <script src="../../../static/js/respond.min.js"></script>
     <![endif]-->
     <style>
         #fh5co-logo a {
@@ -79,7 +79,10 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Trackers</li>
+                <li class="breadcrumb-item"><a href="/trackers">Trackers</a></li>
+                <li class="breadcrumb-item"><a href="/trackers/{{ tracker['id'] }}">{{ tracker['name'] }}</a></li>
+                <li class="breadcrumb-item"><a href="/trackers/{{ tracker['id'] }}/logs">Logs</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ log['id'] }}</li>
             </ol>
         </nav>
         <div id="fh5co-contact" class="animate-box">
@@ -87,31 +90,41 @@
                 <div class="row">
                     <div class="col-md-12">
                         <table id="tracker-table" class="table">
-                            <thead>
-                            <th scope="col">Tracker</th>
-                            <th scope="col">Last tracked</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            </thead>
                             <tbody>
-                            {% for tracker in trackers%}
                             <tr>
-                                <th scope="row"><a href="/tracker/{{ tracker['id'] }}">{{ tracker['name'] }}</a></th>
-                                <td>{{ tracker['last_tracked'] }}</td>
-                                <td><a href="/tracker/{{ tracker['id'] }}/log"><i class="glyphicon glyphicon-plus"></i></a>
-                                </td>
-                                <td><a href="/tracker/{{ tracker['id'] }}/update"><i
-                                        class="glyphicon glyphicon-pencil"></i></a></td>
-                                <td><a href="/tracker/{{ tracker['id'] }}/delete"><i
-                                        class="glyphicon glyphicon-minus"></i></a></td>
+                                <th scope="row">Log ID</th>
+                                <td>{{ log['id'] }}</td>
                             </tr>
-                            {% endfor %}
+                            <tr>
+                                <th scope="row">Tracker ID</th>
+                                <td>{{ log['tracker'] }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Timestamp</th>
+                                <td>{{ log['timestamp'] }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Value</th>
+                                <td>{{ log['value'] }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Note</th>
+                                <td>{{ log['note'] }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td></td>
+                            </tr>
                             </tbody>
                         </table>
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <button id="myButton" class="btn btn-primary">Add Tracker</button>
+                                <button id="updateButton" class="btn btn-primary" onclick="update_log({{ tracker['id'] }}, {{ log['id'] }})">Update Log</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <button id="deleteButton" class="btn btn-primary" onclick="delete_log({{ tracker['id'] }}, {{ log['id'] }})">Delete Log</button>
                             </div>
                         </div>
 
@@ -121,10 +134,12 @@
         </div>
 
         <script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href = "/tracker/create";
-    };
-
+            function update_log(tracker_id, log_id) {
+                location.href = "/trackers/" + tracker_id + "/logs/" + log_id + "/update";
+            };
+            function delete_log(tracker_id, log_id) {
+                location.href = "/trackers/" + tracker_id + "/logs/" + log_id + "/delete";
+            };
         </script>
     </div>
     <!-- END fh5co-page -->
@@ -135,26 +150,26 @@
 <!-- jQuery -->
 
 
-<script src="static/js/jquery.min.js"></script>
+<script src="../../../static/js/jquery.min.js"></script>
 <!-- jQuery Easing -->
-<script src="static/js/jquery.easing.1.3.js"></script>
+<script src="../../../static/js/jquery.easing.1.3.js"></script>
 <!-- Bootstrap -->
-<script src="static/js/bootstrap.min.js"></script>
+<script src="../../../static/js/bootstrap.min.js"></script>
 <!-- Waypoints -->
-<script src="static/js/jquery.waypoints.min.js"></script>
-<script src="static/js/sticky.js"></script>
+<script src="../../../static/js/jquery.waypoints.min.js"></script>
+<script src="../../../static/js/sticky.js"></script>
 
 <!-- Stellar -->
-<script src="static/js/jquery.stellar.min.js"></script>
+<script src="../../../static/js/jquery.stellar.min.js"></script>
 <!-- Superfish -->
-<script src="static/js/hoverIntent.js"></script>
-<script src="static/js/superfish.js"></script>
+<script src="../../../static/js/hoverIntent.js"></script>
+<script src="../../../static/js/superfish.js"></script>
 
 <!-- Google Map -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
-<script src="static/js/google_map.js"></script>
+<script src="../../../static/js/google_map.js"></script>
 
 <!-- Main JS -->
-<script src="static/js/main.js"></script>
+<script src="../../../static/js/main.js"></script>
 </body>
 </html>

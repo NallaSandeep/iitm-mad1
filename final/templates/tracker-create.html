@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Contact Sankalp team</title>
+    <title>TrackSelf | Tracker | Create</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
@@ -83,7 +83,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/tracker">Trackers</a></li>
+                <li class="breadcrumb-item"><a href="/trackers">Trackers</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Create</li>
             </ol>
         </nav>
@@ -91,7 +91,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <form action="/tracker/create" method="POST" id="create-tracker-form">
+                        <form action="/trackers/create" method="POST" id="create-tracker-form">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -120,10 +120,19 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="submit" value="Create" class="btn btn-primary">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <input type="submit" value="Create" class="btn btn-primary">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <button id="cancelButton" class="btn btn-primary" onclick="cancel()">Cancel</button>
+                                        </div>
                                     </div>
                                 </div>
+
+
                             </div>
                         </form>
                     </div>
@@ -138,6 +147,11 @@
 <!-- END fh5co-wrapper -->
 
 <!-- jQuery -->
+        <script type="text/javascript">
+            function cancel(tracker_id) {
+                location.href = "/trackers";
+            };
+        </script>
 
 
 <script src="../../static/js/jquery.min.js"></script>
