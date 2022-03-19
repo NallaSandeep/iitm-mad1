@@ -1,56 +1,132 @@
 <!DOCTYPE html>
-<html>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<html class="no-js">
 <head>
-    <title>{{ tracker['name'] }} Tracker Details</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contact Sankalp team</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
+    <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
+    <meta name="author" content="FREEHTML5.CO"/>
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'> -->
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="../static/css/icomoon.css">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <!-- Superfish -->
+    <link rel="stylesheet" href="../static/css/superfish.css">
+
+    <link rel="stylesheet" href="../static/css/style.css">
+
+
+    <!-- Modernizr JS -->
+    <script src="../static/js/modernizr-2.6.2.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="https://s0-azure.assets-yammer.com/assets/platform_embed.js"></script>
+    <script type="text/javascript">
+		yam.connect.embedFeed({
+		  container: "#embedded-feed",
+		  network: "ftdi.com",
+		  feedType: "group",
+		  feedId: "12178968"
+		});
+
+    </script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="../static/js/respond.min.js"></script>
+    <![endif]-->
     <style>
-        table, th, td {
-          border: 1px solid black;
-          border-collapse: collapse;
+        #fh5co-logo a {
+        color: #ff5722;
+        text-transform: none;
+        font-family: Garamond;
+        font-size: 42px;
         }
+
     </style>
 </head>
 <body>
-<h1>Hello {{ username }}!</h1>
-<div style="text-align:center;">
-<a href="/logout">logout</a>
-</div>
-<div style="text-align:left;">
-<a href="/tracker">Back to Trackers</a>
-</div>
-<h2>{{ tracker['name'] }} - Tracker</h2>
-<label for="period">Filter</label>
-<select name="period" id="period" onchange="redirect({{ tracker['id'] }}, document.getElementById('period').value)">
-  <option value="1" {% if last_days==1%}selected='selected'{% endif %}>Last 24 hours</option>
-  <option value="7" {% if last_days==7%}selected='selected'{% endif %}>Last 7 days</option>
-  <option value="30" {% if last_days==30%}selected='selected'{% endif %}>Last 30 days</option>
-</select>
-<div id="tracking-graph">
-<span id="myPlot" style="width:100%;max-width:700px"></span>
-</div>
-<h2>Logs</h2>
-<table id = "tracker-logs">
-<thead>
-<th>On</th>
-<th>Value</th>
-<th></th>
-<th></th>
-<th></th>
-</thead>
-<tbody>
-{% for log in logs%}
-<tr>
-    <td>{{ log['timestamp'] }}</td>
-    <td>{{ log['value'] }}</td>
-    <td>{{ log['note'] }}</td>
-    <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/update">Update</a></td>
-    <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/delete">Delete</a></td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
 
-<script type="text/javascript">
+<div id="fh5co-wrapper">
+    <div id="fh5co-page">
+        <header id="fh5co-header-section" class="sticky-banner">
+            <div class="container">
+                <div class="nav-header">
+                    <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
+                    <h1 id="fh5co-logo" class="col-sm-2"><a href="/">TrackSelf</a></h1>
+                    <!-- START #fh5co-menu-wrap -->
+                    <nav id="fh5co-menu-wrap" role="navigation" class="col-sm-1">
+                        <ul class="sf-menu" id="fh5co-primary-menu">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                    {{ username }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="logout">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/tracker">Trackers</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ tracker['name'] }}</li>
+            </ol>
+        </nav>
+        <div id="fh5co-contact" class="animate-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="period">Filter</label>
+                        <select name="period" id="period" class="form-control form-control-lg"  placeholder="Filter"
+                                onchange="redirect({{ tracker['id'] }}, document.getElementById('period').value)">
+                            <option value="1" {% if last_days==1%}selected='selected'{% endif %}>Last 24 hours</option>
+                            <option value="7" {% if last_days==7%}selected='selected'{% endif %}>Last 7 days</option>
+                            <option value="30" {% if last_days==30%}selected='selected'{% endif %}>Last 30 days</option>
+                        </select>
+
+                        <div id="tracking-graph">
+                            <div id="myPlot"></div>
+                        </div>
+                        <h2>Logs</h2>
+                        <table id="tracker-logs" class="table">
+                            <thead>
+                            <th scope="col">On</th>
+                            <th scope="col">Value</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            </thead>
+                            <tbody>
+                            {% for log in logs%}
+                            <tr>
+                                <td>{{ log['timestamp'] }}</td>
+                                <td>{{ log['value'] }}</td>
+                                <td>{{ log['note'] }}</td>
+                                <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/update"><i
+                                        class="glyphicon glyphicon-pencil"></i></a></td>
+                                <td><a href="/tracker/{{ tracker['id'] }}/log/{{ log['id'] }}/delete"><i
+                                        class="glyphicon glyphicon-minus"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
     function redirect(tracking_id, value){
         window.location.href=tracking_id.toString().concat('?lastdays=').concat(value);
     }
@@ -102,6 +178,59 @@
         Plotly.newPlot("myPlot", data, layout);
     }
     plot({{ timestamps|safe }},{{ values|safe }}, '{{ tracker['type'] }}', '{{ tracker['settings'] }}')
-</script>
+    // MAKE THE PLOTS RESPONSIVE
+    (function() {
+      var d3 = Plotly.d3;
+      var WIDTH_IN_PERCENT_OF_PARENT = 100,
+          HEIGHT_IN_PERCENT_OF_PARENT = 90;
+
+      var gd3 = d3.selectAll(".responsive-plot")
+          .style({
+            width: WIDTH_IN_PERCENT_OF_PARENT + '%',
+            'margin-left': (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + '%',
+            height: HEIGHT_IN_PERCENT_OF_PARENT + 'vh',
+            'margin-top': (100 - HEIGHT_IN_PERCENT_OF_PARENT) / 2 + 'vh'
+          });
+
+      var nodes_to_resize = gd3[0]; //not sure why but the goods are within a nested array
+      window.onresize = function() {
+        for (var i = 0; i < nodes_to_resize.length; i++) {
+          Plotly.Plots.resize(nodes_to_resize[i]);
+        }
+      };
+
+    })();
+        </script>
+    </div>
+    <!-- END fh5co-page -->
+
+</div>
+<!-- END fh5co-wrapper -->
+
+<!-- jQuery -->
+
+
+<script src="../static/js/jquery.min.js"></script>
+<!-- jQuery Easing -->
+<script src="../static/js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="../static/js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="../static/js/jquery.waypoints.min.js"></script>
+<script src="../static/js/sticky.js"></script>
+
+<!-- Stellar -->
+<script src="../static/js/jquery.stellar.min.js"></script>
+<!-- Superfish -->
+<script src="../static/js/hoverIntent.js"></script>
+<script src="../static/js/superfish.js"></script>
+
+<!-- Google Map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
+<script src="../static/js/google_map.js"></script>
+
+<!-- Main JS -->
+<script src="../static/js/main.js"></script>
+
 </body>
 </html>
