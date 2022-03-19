@@ -29,7 +29,7 @@ db = SQLAlchemy()
 
 def create_app():
     current_dir = os.path.abspath(os.path.dirname(__file__))
-    app = Flask(__name__, template_folder='templates')
+    app = Flask(__name__, template_folder='templates', static_folder="static")
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(current_dir, 'tracker-db.db')
     db.init_app(app)
     api = Api(app)
@@ -103,8 +103,12 @@ class InputValidationError(HTTPException):
     def __init__(self, status_code, error_message):
         self.response = make_response(error_message, status_code)
 
+@app.route("/")
+def home():
+    return render_template('home.html')
 
-@app.route("/", methods=["GET", "POST"])
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.form:
         username=request.form['user-name']
