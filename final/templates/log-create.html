@@ -1,33 +1,8 @@
 <!DOCTYPE html>
 <html class="no-js">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>TrackSelf | Log | Create</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
-    <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
-    <meta name="author" content="FREEHTML5.CO"/>
-    <link rel="shortcut icon" href="favicon.ico">
-    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'> -->
-    <link rel="stylesheet" href="../../../static/css/animate.css">
-    <link rel="stylesheet" href="../../../static/css/icomoon.css">
-    <link rel="stylesheet" href="../../../static/css/bootstrap.css">
-    <link rel="stylesheet" href="../../../static/css/superfish.css">
-    <link rel="stylesheet" href="../../../static/css/style.css">
-    <!-- Modernizr JS -->
-    <script src="../../../static/js/modernizr-2.6.2.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript" src="https://s0-azure.assets-yammer.com/assets/platform_embed.js"></script>
-    <script type="text/javascript">
-		yam.connect.embedFeed({
-		  container: "#embedded-feed",
-		  network: "ftdi.com",
-		  feedType: "group",
-		  feedId: "12178968"
-		});
-    </script>
-
+    {% include 'css.html' %}
     <style>
         #fh5co-logo a {
         color: #ff5722;
@@ -39,21 +14,6 @@
         color: #ff5722 !important;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
-    <script>
-    $(function() {
-      $('#datetimepicker1').datetimepicker({
-        format: 'YYYY-MM-DDThh:mm:ss'
-    });
-    });
-    </script>
-
 </head>
 <body>
 
@@ -80,7 +40,7 @@
         <div id="fh5co-contact" class="animate-box">
             <div class="container">
 
-                <form action="/trackers/{{ tracker['id'] }}/logs" method="POST" id="log-form">
+                <form action="/trackers/{{ tracker['id'] }}/logs/create" method="POST" id="log-form">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -146,38 +106,13 @@
 </div>
 
 </div>
-<!-- END fh5co-page -->
 
 </div>
-<!-- END fh5co-wrapper -->
-
-<!--&lt;!&ndash; jQuery &ndash;&gt;-->
-        <script type="text/javascript">
-            function cancel(tracker_id) {
-                location.href = "/trackers/".concat(tracker_id).concat("/logs");
-            };
-        </script>
-
-<!--<script src="../../../static/js/jquery.min.js"></script>-->
-<!--&lt;!&ndash; jQuery Easing &ndash;&gt;-->
-<!--<script src="../../../static/js/jquery.easing.1.3.js"></script>-->
-<!-- Bootstrap -->
-<script src="../../../static/js/bootstrap.min.js"></script>
-<!-- Waypoints -->
-<script src="../../../static/js/jquery.waypoints.min.js"></script>
-<script src="../../../static/js/sticky.js"></script>
-
-<!-- Stellar -->
-<script src="../../../static/js/jquery.stellar.min.js"></script>
-<!-- Superfish -->
-<script src="../../../static/js/hoverIntent.js"></script>
-<script src="../../../static/js/superfish.js"></script>
-
-<!-- Google Map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
-<script src="../../../static/js/google_map.js"></script>
-
-<!-- Main JS -->
-<script src="../../../static/js/main.js"></script>
+<script type="text/javascript">
+    function cancel(tracker_id) {
+        location.href = "/trackers/".concat(tracker_id).concat("/logs");
+    };
+</script>
+ {% include 'calendar.html' %}
 </body>
 </html>

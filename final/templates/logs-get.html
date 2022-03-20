@@ -1,58 +1,10 @@
 <!DOCTYPE html>
 <html class="no-js">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>TrackSelf | Logs</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
-    <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
-    <meta name="author" content="FREEHTML5.CO"/>
-    <link rel="shortcut icon" href="favicon.ico">
-
-    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'> -->
-
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="../../static/css/animate.css">
-    <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="../../static/css/icomoon.css">
-    <!-- Bootstrap  -->
-    <link rel="stylesheet" href="../../static/css/bootstrap.css">
-    <!-- Superfish -->
-    <link rel="stylesheet" href="../../static/css/superfish.css">
-
-    <link rel="stylesheet" href="../../static/css/style.css">
-
-
-    <!-- Modernizr JS -->
-    <script src="../../static/js/modernizr-2.6.2.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript" src="https://s0-azure.assets-yammer.com/assets/platform_embed.js"></script>
-    <script type="text/javascript">
-		yam.connect.embedFeed({
-		  container: "#embedded-feed",
-		  network: "ftdi.com",
-		  feedType: "group",
-		  feedId: "12178968"
-		});
-
-    </script>
-    <!-- FOR IE9 below -->
-    <!--[if lt IE 9]>
-    <script src="../../static/js/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        #fh5co-logo a {
-        color: #ff5722;
-        text-transform: none;
-        font-family: Garamond;
-        font-size: 42px;
-        }
-
-    </style>
+    {% include 'css.html' %}
 </head>
 <body>
-
 <div id="fh5co-wrapper">
     <div id="fh5co-page">
         <header id="fh5co-header-section" class="sticky-banner">
@@ -77,14 +29,14 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="period">Filter</label>
-                        <select name="period" id="period" class="form-control form-control-lg"  placeholder="Filter"
+                        <select name="period" id="period" class="form-control form-control-lg" placeholder="Filter"
                                 onchange="redirect({{ tracker['id'] }}, document.getElementById('period').value)">
                             <option value="1" {% if last_days==1%}selected='selected'{% endif %}>Last 24 hours</option>
                             <option value="7" {% if last_days==7%}selected='selected'{% endif %}>Last 7 days</option>
                             <option value="30" {% if last_days==30%}selected='selected'{% endif %}>Last 30 days</option>
                         </select>
-                        </div>
-<div class="col-md-12">
+                    </div>
+                    <div class="col-md-12">
                         <div id="tracking-graph">
                             <div id="myPlot"></div>
                         </div>
@@ -101,17 +53,18 @@
                             <tbody>
                             {% for log in logs%}
                             <tr>
-                                <td><a href="/trackers/{{ tracker['id'] }}/logs/{{ log['id'] }}">{{ log['id'] }}</a></td>
+                                <td><a href="/trackers/{{ tracker['id'] }}/logs/{{ log['id'] }}">{{ log['id'] }}</a>
+                                </td>
                                 <td>{{ log['timestamp'] }}</td>
                                 <td>
                                     {% if tracker['type'] == 'boolean'%}
-                                        {% if log['value'] == '1'%}
-                                            True
-                                        {% else %}
-                                            False
-                                        {% endif %}
+                                    {% if log['value'] == '1'%}
+                                    True
                                     {% else %}
-                                        {{ log['value'] }}
+                                    False
+                                    {% endif %}
+                                    {% else %}
+                                    {{ log['value'] }}
                                     {% endif %}
                                 </td>
                                 <td>{{ log['note'] }}</td>
@@ -125,124 +78,23 @@
                         </table>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <button id="myButton" class="btn btn-primary" onclick="add_log({{ tracker['id'] }})">Add Log</button>
+                                <button id="myButton" class="btn btn-primary" onclick="add_log({{ tracker['id'] }})">Add
+                                    Log
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <script type="text/javascript">
+    </div>
+</div>
+<script type="text/javascript">
     function add_log(tracker_id) {
         location.href = "/trackers/" + tracker_id + "/logs/create";
     };
-        </script>
-        <script type="text/javascript">
-    function redirect(tracking_id, value){
-        window.location.href='?lastdays='.concat(value);
-    }
-    function plot(xArray,yArray, type, settings) {
-        //console.log(type);
-        // Define Layout
-        var layout = {
-          xaxis: {title: "Time stamp"},
-          yaxis: {title: "Value"},
-          title: "Trend line"
-        };
-        var data;
-        if (type=='boolean') {
-             data = [{
-              x: xArray,
-              y: yArray,
-              type:"bar"
-            }];
-            layout.title= "Trend line (True=1, False=-1)"
-        } else if (type=='choice') {
-             settingsList=settings.split(',');
-             data = [];
-             settingsList.forEach(function(setting){
-                choicesList=[]
-                yArray.forEach(function(options) {
-                    if(options.includes(setting)){
-                        choicesList.push(1);
-                    } else {
-                        choicesList.push(0);
-                    }
-                });
-                data.push({
-                      x: xArray,
-                      y: choicesList,
-                      type:"bar",
-                      name:setting
-                });
-              });
-            layout.barmode='stack'
-        } else {
-             data = [{
-              x: xArray,
-              y: yArray,
-              mode:"lines"
-            }];
-        }
-        // Display using Plotly
-        console.log(data)
-        Plotly.newPlot("myPlot", data, layout);
-    }
-    plot({{ timestamps|safe }},{{ values|safe }}, '{{ tracker['type'] }}', '{{ tracker['settings'] }}')
-    // MAKE THE PLOTS RESPONSIVE
-    (function() {
-      var d3 = Plotly.d3;
-      var WIDTH_IN_PERCENT_OF_PARENT = 100,
-          HEIGHT_IN_PERCENT_OF_PARENT = 90;
-
-      var gd3 = d3.selectAll(".responsive-plot")
-          .style({
-            width: WIDTH_IN_PERCENT_OF_PARENT + '%',
-            'margin-left': (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + '%',
-            height: HEIGHT_IN_PERCENT_OF_PARENT + 'vh',
-            'margin-top': (100 - HEIGHT_IN_PERCENT_OF_PARENT) / 2 + 'vh'
-          });
-
-      var nodes_to_resize = gd3[0]; //not sure why but the goods are within a nested array
-      window.onresize = function() {
-        for (var i = 0; i < nodes_to_resize.length; i++) {
-          Plotly.Plots.resize(nodes_to_resize[i]);
-        }
-      };
-
-    })();
-        </script>
-    </div>
-    <!-- END fh5co-page -->
-
-</div>
-<!-- END fh5co-wrapper -->
-
-<!-- jQuery -->
-
-
-<script src="../../static/js/jquery.min.js"></script>
-<!-- jQuery Easing -->
-<script src="../../static/js/jquery.easing.1.3.js"></script>
-<!-- Bootstrap -->
-<script src="../../static/js/bootstrap.min.js"></script>
-<!-- Waypoints -->
-<script src="../../static/js/jquery.waypoints.min.js"></script>
-<script src="../../static/js/sticky.js"></script>
-
-<!-- Stellar -->
-<script src="../../static/js/jquery.stellar.min.js"></script>
-<!-- Superfish -->
-<script src="../../static/js/hoverIntent.js"></script>
-<script src="../../static/js/superfish.js"></script>
-
-<!-- Google Map -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
-<script src="../../static/js/google_map.js"></script>
-
-<!-- Main JS -->
-<script src="../../static/js/main.js"></script>
-
+</script>
+{% include 'plotly.html' %}
+{% include 'javascript.html' %}
 </body>
 </html>

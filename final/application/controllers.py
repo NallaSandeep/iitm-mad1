@@ -1,4 +1,5 @@
 import flask
+import requests
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from datetime import datetime, timedelta
 
@@ -10,6 +11,7 @@ from .models import User, Log, Tracker, Role
 from .database import db
 from flask import current_app as app
 
+base_uri = 'http://localhost:5000/'
 
 @app.route("/")
 def home():
@@ -20,44 +22,8 @@ def home():
 @login_required
 @roles_required('admin')
 def users_page():
-    users = User.query.join(Role.users,isouter=True)
+    users = User.query.all()
     return render_template('users-get.html', users=users)
-
-
-# @app.route("/admin/users/create", methods=["GET", "POST"])
-# @login_required
-# @roles_required('admin')
-# def users_create():
-#
-#     if request.method == 'GET':
-#         return render_template('tracker-create.html')
-#     elif request.method=='POST':
-#         name=request.form['name']
-#         desc=request.form['desc']
-#         type=request.form['type']
-#         settings=request.form['settings']
-#         s = Tracker(name=name, description=desc, type=type, settings=settings)
-#         db.session.add(s)
-#         db.session.commit()
-#         return redirect(url_for('users_page'))
-#
-#
-# @app.route("/admin/users/<string:user_id>/update", methods=["GET", "POST"])
-# @login_required
-# @roles_required('admin')
-# def users_update(user_id):
-#
-#     if request.method == 'GET':
-#         tracker = Tracker.query.filter_by(id=tracker_id).first()
-#         return render_template('tracker-update.html', tracker=tracker)
-#     elif request.method=='POST':
-#         name=request.form['name']
-#         desc=request.form['desc']
-#         type=request.form['type']
-#         settings=request.form['settings']
-#         s = Tracker.query.filter_by(id=tracker_id).update(dict(name=name, description=desc, type=type, settings=settings))
-#         db.session.commit()
-#         return redirect(url_for('users_page'))
 
 
 @app.route("/admin/users/<string:user_id>/delete")
@@ -84,9 +50,10 @@ def trackers_page():
 @app.route("/trackers/<string:tracker_id>")
 @login_required
 def tracker_page(tracker_id):
-    
-    tracker = Tracker.query.filter_by(id=tracker_id).first()
-    return render_template('tracker-get.html', tracker=tracker)
+    tracker = requests.get(base_uri + 'api/trackers/' + tracker_id)
+    if tracker.status_code != 200:
+        return redirect(url_for('not_found_page'))
+    return render_template('tracker-get.html', tracker=tracker.json())
 
 
 @app.route("/trackers/create", methods=["GET", "POST"])
@@ -129,9 +96,7 @@ def trackers_update(tracker_id):
 @login_required
 @roles_required('admin')
 def trackers_delete(tracker_id):
-    Tracker.query.filter_by(id=tracker_id).delete()
-    Log.query.filter_by(tracker=tracker_id).delete()
-    db.session.commit()
+    requests.delete(base_uri + 'api/trackers/' + tracker_id)
     return redirect(url_for('trackers_page'))
 
 
@@ -152,19 +117,19 @@ def tracker_details_page(tracker_id):
                            timestamps=timestamps, values=values)
 
 
-@app.route("/trackers/<string:tracker_id>/logs/<int:log_id>", methods=["GET", "POST"])
+@app.route("/trackers/<string:tracker_id>/logs/<string:log_id>", methods=["GET", "POST"])
 @login_required
 def tracker_log(tracker_id, log_id):
-    
-    tracker = Tracker.query.filter_by(id=tracker_id).first()
-    log = Log.query.filter_by(id=log_id).first()
-    return render_template('log-get.html', tracker=tracker, log=log)
+    tracker = requests.get(base_uri + 'api/trackers/' + tracker_id)
+    log = requests.get(base_uri + 'api/trackers/' + tracker_id + "/logs/" + log_id)
+    if tracker.status_code != 200 or log.status_code != 200:
+        return redirect(url_for('not_found_page'))
+    return render_template('log-get.html', tracker=tracker.json(), log=log.json())
 
 
 @app.route("/trackers/<string:tracker_id>/logs/create", methods=["GET", "POST"])
 @login_required
 def tracker_logs(tracker_id):
-    
     tracker = Tracker.query.filter_by(id=tracker_id).first()
     if request.method == 'GET':
         return render_template('log-create.html', tracker=tracker)
@@ -178,7 +143,7 @@ def tracker_logs(tracker_id):
         return redirect(url_for('trackers_page'))
 
 
-@app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/update", methods=["GET", "POST"])
+@app.route("/trackers/<string:tracker_id>/logs/<string:log_id>/update", methods=["GET", "POST"])
 @login_required
 def log_update(tracker_id, log_id):
     
@@ -195,11 +160,10 @@ def log_update(tracker_id, log_id):
         return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 
-@app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/delete")
+@app.route("/trackers/<string:tracker_id>/logs/<string:log_id>/delete")
 @login_required
 def log_delete(tracker_id,log_id):
-    Log.query.filter_by(id=log_id).delete()
-    db.session.commit()
+    requests.delete(base_uri + 'api/trackers/' + tracker_id + "/log/" + log_id)
     return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 

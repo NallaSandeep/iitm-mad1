@@ -26,12 +26,6 @@ class ExtendedRegisterForm(RegisterForm):
     username = StringField('User Name', [DataRequired()])
 
 
-# TODO
-# Integration of APIs with frontend app
-# ○ All form inputs fields - text, numbers etc. with suitable messages
-# develop admin page for setting roles & create user
-
-
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder="static")
     if os.getenv('ENV', "development") == "production":
