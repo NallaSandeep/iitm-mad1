@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>TrackSelf | Tracker</title>
+    <title>TrackSelf | Unauthorized</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
@@ -68,73 +68,17 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item"><a href="/trackers">Trackers</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ tracker['name'] }}</li>
+                <li class="breadcrumb-item active" aria-current="page">Not Authorized</li>
             </ol>
         </nav>
-        <div id="fh5co-contact" class="animate-box">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="tracker-table" class="table">
-                            <tbody>
-                            <tr>
-                                <th scope="row">Tracker ID</th>
-                                <td>{{ tracker['id'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Name</th>
-                                <td>{{ tracker['name'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Description</th>
-                                <td>{{ tracker['description'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Type</th>
-                                <td>{{ tracker['type'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Settings</th>
-                                <td>{{ tracker['settings'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <button id="updateButton" class="btn btn-primary" onclick="update_log({{ tracker['id'] }})">Update Tracker</button>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <button id="deleteButton" class="btn btn-primary" onclick="delete_log({{ tracker['id'] }})">Delete Tracker</button>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <button id="logsButton" class="btn btn-primary" onclick="read_log({{ tracker['id'] }})">Logs</button>
-                            </div>
-                        </div>
-        <script type="text/javascript">
-            function update_log(tracker_id) {
-                location.href = "/trackers/" + tracker_id + "/update";
-            };
-            function delete_log(tracker_id) {
-                location.href = "/trackers/" + tracker_id + "/delete";
-            };
-            function read_log(tracker_id) {
-                location.href = "/trackers/" + tracker_id + "/logs";
-            };
-        </script>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Forbidden</h1>
+                    <p>Not authorized to access this page.</p>
                 </div>
             </div>
         </div>
-
-
     </div>
     <!-- END fh5co-page -->
 

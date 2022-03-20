@@ -1,5 +1,10 @@
+import flask
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from datetime import datetime, timedelta
+
+from flask_login import login_required
+from flask_security import roles_required, LoginForm, login_user
+from sqlalchemy.sql.functions import user
 
 from .models import User, Log, Tracker
 from .database import db
@@ -11,22 +16,23 @@ def home():
     return render_template('home.html')
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.form:
-        username=request.form['user-name']
-        password=request.form['password']
-        missing=User.query.filter_by(username=username).first()
-        if missing is None:
-            return redirect(url_for('login'))
-        else:
-            resp = make_response(redirect(url_for('trackers_page')))
-            resp.set_cookie('username', username)
-            return resp
-    return render_template('login.html')
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     if request.form:
+#         username=request.form['user-name']
+#         password=request.form['password']
+#         missing=User.query.filter_by(username=username).first()
+#         if missing is None:
+#             return redirect(url_for('login'))
+#         else:
+#             resp = make_response(redirect(url_for('trackers_page')))
+#             resp.set_cookie('username', username)
+#             return resp
+#     return render_template('login.html')
 
 
 @app.route("/trackers")
+@login_required
 def trackers_page():
     username = request.cookies.get('username')
     latest_logs = db.session.query(
@@ -38,6 +44,7 @@ def trackers_page():
 
 
 @app.route("/trackers/<string:tracker_id>")
+@login_required
 def tracker_page(tracker_id):
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
@@ -45,6 +52,8 @@ def tracker_page(tracker_id):
 
 
 @app.route("/trackers/create", methods=["GET", "POST"])
+@login_required
+@roles_required('admin')
 def trackers_create():
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -61,6 +70,8 @@ def trackers_create():
 
 
 @app.route("/trackers/<string:tracker_id>/update", methods=["GET", "POST"])
+@login_required
+@roles_required('admin')
 def trackers_update(tracker_id):
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -77,6 +88,8 @@ def trackers_update(tracker_id):
 
 
 @app.route("/trackers/<string:tracker_id>/delete")
+@login_required
+@roles_required('admin')
 def trackers_delete(tracker_id):
     Tracker.query.filter_by(id=tracker_id).delete()
     Log.query.filter_by(tracker=tracker_id).delete()
@@ -85,6 +98,7 @@ def trackers_delete(tracker_id):
 
 
 @app.route("/trackers/<string:tracker_id>/logs")
+@login_required
 def tracker_details_page(tracker_id):
     last_days = int(request.args.get('lastdays',30))
     filter_after = datetime.today() - timedelta(days=last_days)
@@ -101,6 +115,7 @@ def tracker_details_page(tracker_id):
 
 
 @app.route("/trackers/<string:tracker_id>/logs/<int:log_id>", methods=["GET", "POST"])
+@login_required
 def tracker_log(tracker_id, log_id):
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
@@ -109,6 +124,7 @@ def tracker_log(tracker_id, log_id):
 
 
 @app.route("/trackers/<string:tracker_id>/logs/create", methods=["GET", "POST"])
+@login_required
 def tracker_logs(tracker_id):
     username = request.cookies.get('username')
     tracker = Tracker.query.filter_by(id=tracker_id).first()
@@ -125,6 +141,7 @@ def tracker_logs(tracker_id):
 
 
 @app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/update", methods=["GET", "POST"])
+@login_required
 def log_update(tracker_id, log_id):
     username = request.cookies.get('username')
     if request.method == 'GET':
@@ -141,14 +158,18 @@ def log_update(tracker_id, log_id):
 
 
 @app.route("/trackers/<int:tracker_id>/logs/<int:log_id>/delete")
+@login_required
 def log_delete(tracker_id,log_id):
     Log.query.filter_by(id=log_id).delete()
     db.session.commit()
     return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 
-@app.route("/logout")
-def logout():
-    res = make_response(redirect(url_for('login')))
-    res.delete_cookie('username')
-    return res
+@app.route("/not-found")
+def not_found_page():
+    return render_template("notfound.html"), 404
+
+
+@app.route("/unauth")
+def unauth_page():
+    return render_template("unauth.html"), 403

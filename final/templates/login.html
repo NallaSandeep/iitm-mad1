@@ -70,16 +70,16 @@
 		</header>
             <div id="fh5co-contact" class="animate-box">
 			<div class="container">
-				<form action="/login" method="POST" id="login-form">
+				<form action="{{ url_for_security('login') }}" method="POST" id="login-form">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="user-name" placeholder="User Name"/>
+                                <input type="text" class="form-control" name="login_form.email" placeholder="User Name"/>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="password" placeholder="Password"/>
+                                <input type="password" class="form-control" name="login_form.password" placeholder="Password"/>
                             </div>
                         </div>
                         <div class="col-md-12">

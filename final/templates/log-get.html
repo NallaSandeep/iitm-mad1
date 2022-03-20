@@ -60,19 +60,7 @@
                 <div class="nav-header">
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
                     <h1 id="fh5co-logo" class="col-sm-2"><a href="/">TrackSelf</a></h1>
-                    <!-- START #fh5co-menu-wrap -->
-                    <nav id="fh5co-menu-wrap" role="navigation" class="col-sm-1">
-                        <ul class="sf-menu" id="fh5co-primary-menu">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                    {{ username }}
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="/logout">Logout</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
+                    {% include 'login-state.html' %}
                 </div>
             </div>
         </header>
