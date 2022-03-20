@@ -163,7 +163,7 @@ def log_update(tracker_id, log_id):
 @app.route("/trackers/<string:tracker_id>/logs/<string:log_id>/delete")
 @login_required
 def log_delete(tracker_id,log_id):
-    requests.delete(base_uri + 'api/trackers/' + tracker_id + "/log/" + log_id)
+    requests.delete(base_uri + 'api/trackers/' + tracker_id + "/logs/" + log_id)
     return redirect(url_for('tracker_details_page', tracker_id=tracker_id))
 
 

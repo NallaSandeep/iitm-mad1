@@ -61,9 +61,8 @@
                                 {% set list = tracker['settings'].split(',') %}
                                 {% for choice in list %}
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="value" value="{{ choice }}" {%
-                                           if
-                                           choice in log.value%}checked='checked' {% endif %}>
+                                    <input type="checkbox" class="form-check-input" name="value" value="{{ choice }}"
+                                    {% if choice in log.value%}checked='checked' {% endif %}>
                                     <label class="form-check-label" for="value">
                                         {{ choice }}
                                     </label>
@@ -74,17 +73,14 @@
                                        value="{{ log['value'] }}" required/>
                                 {% elif tracker['type'] == 'boolean'%}
                                 <select name="value" class="form-control" id="value">
-                                    <option value="default" selected disabled hidden>Type</option>
                                     <option value="1" {% if log.value=='1'%}selected='selected'{% endif %}>True</option>
                                     <option value="-1" {% if log.value=='-1'%}selected='selected'{% endif %}>False
                                     </option>
                                 </select>
                                 {% elif tracker['type'] == 'numeric'%}
-                                <input type="number" class="form-control" name='value' value="{{ log['value'] }}"
-                                       step='0.01'/>
+                                <input type="number" class="form-control" name='value' value="{{ log['value'] }}" step='0.01' required/>
                                 {% else %}
-                                <input type="text" class="form-control" name="value" value="{{ log['value'] }}"
-                                       required/>
+                                <input type="text" class="form-control" name="value" value="{{ log['value'] }}" required/>
                                 {% endif %}
                             </div>
                         </div>

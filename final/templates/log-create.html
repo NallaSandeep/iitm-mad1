@@ -67,15 +67,14 @@
                                 </div>
                                 {% endfor %}
                                 {% elif tracker['type'] == 'duration'%}
-                                <input type="text" class="form-control" name='value' class="duration"/>
+                                <input type="text" class="form-control" name='value' class="duration" required/>
                                 {% elif tracker['type'] == 'boolean'%}
-                                <select name="value" class="form-control" id="value">
-                                    <option value="default" selected disabled hidden>Type</option>
+                                <select name="value" class="form-control" id="value" required>
                                     <option value="1">True</option>
-                                    <option value="-1">False</option>
+                                    <option value="-1" selected>False</option>
                                 </select>
                                 {% elif tracker['type'] == 'numeric'%}
-                                <input type="number" class="form-control" name='value' step='0.01'/>
+                                <input type="number" class="form-control" name='value' step='0.01' required/>
                                 {% else %}
                                 <input type="text" class="form-control" name="value" required/>
                                 {% endif %}

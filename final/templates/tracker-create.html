@@ -42,8 +42,7 @@
                                 </div>
                                 <div class="col-md-12">
                                      <div class="form-group">
-                                        <select name="type" id="type" class="form-control"  placeholder="Type">
-                                            <option value="default" selected disabled hidden>Type</option>
+                                        <select name="type" id="type" class="form-control"  placeholder="Type" onchange="validate()">
                                             <option value="numeric">Numerical</option>
                                             <option value="choice">Multiple Choice</option>
                                             <option value="duration">Time duration</option>
@@ -53,7 +52,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="settings" placeholder="Settings"/>
+                                        <input type="text" class="form-control" name="settings" id="settings" placeholder="Settings"/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -77,8 +76,15 @@
     </div>
 </div>
     <script type="text/javascript">
-        function cancel(tracker_id) {
+        function cancel() {
             location.href = "/trackers";
+        };
+        function validate() {
+            if(document.getElementById('type').value == 'choice') {
+                document.getElementById('settings').required = true;
+            } else {
+                document.getElementById('settings').required = false;
+            }
         };
     </script>
 </body>

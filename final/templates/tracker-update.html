@@ -43,20 +43,11 @@
                                 </div>
                                  <div class="col-md-12">
                                      <div class="form-group">
-                                        <select name="type" id="type" class="form-control"  placeholder="Type">
-                                            <option value="default" selected disabled hidden>Type</option>
-                                            <option value="numeric" {% if tracker.type=='numeric'%}selected='selected'{%
-                                                    endif %}>Numerical
-                                            </option>
-                                            <option value="choice" {% if tracker.type=='choice'%}selected='selected'{% endif
-                                                    %}>Multiple Choice
-                                            </option>
-                                            <option value="duration" {% if tracker.type=='duration'%}selected='selected'{%
-                                                    endif %}>Time duration
-                                            </option>
-                                            <option value="boolean" {% if tracker.type=='boolean'%}selected='selected'{%
-                                                    endif %}>Boolean
-                                            </option>
+                                        <select name="type" id="type" class="form-control" placeholder="Type" onchange="validate()">
+                                            <option value="numeric" {% if tracker.type=='numeric'%}selected='selected'{%endif %}>Numerical</option>
+                                            <option value="choice" {% if tracker.type=='choice'%}selected='selected'{% endif%}>Multiple Choice</option>
+                                            <option value="duration" {% if tracker.type=='duration'%}selected='selected'{%endif %}>Time duration</option>
+                                            <option value="boolean" {% if tracker.type=='boolean'%}selected='selected'{%endif %}>Boolean</option>
                                         </select>
                                      </div>
                                 </div>
@@ -89,6 +80,13 @@
 <script type="text/javascript">
     function cancel(tracker_id) {
         location.href = "/trackers";
+    };
+    function validate() {
+        if(document.getElementById('type').value == 'choice') {
+            document.getElementById('settings').required = true;
+        } else {
+            document.getElementById('settings').required = false;
+        }
     };
 </script>
 </body>
