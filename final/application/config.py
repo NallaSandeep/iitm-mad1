@@ -20,3 +20,5 @@ class LocalDevelopmentConfig(Config):
     SECURITY_CONFIRMABLE = False
     SECURITY_SEND_REGISTER_EMAIL = False
     SECURITY_UNAUTHORIZED_VIEW = None
+    SECURITY_POST_LOGIN_VIEW = "/trackers"
+    SECURITY_POST_REGISTER_VIEW = "/trackers"

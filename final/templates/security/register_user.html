@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TrackSelf | Login</title>
+	<title>TrackSelf | Register</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -78,6 +78,11 @@
 				<form action="{{ url_for_security('register') }}" method="POST" id="register_user_form">
                     <div class="row">
 						  {{ register_user_form.hidden_tag() }}
+						<div class="col-md-12">
+                            <div class="form-group">
+                                {{ render_field_with_errors(register_user_form.username) }}
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 {{ render_field_with_errors(register_user_form.email) }}
@@ -115,6 +120,8 @@
 	<!-- jQuery -->
 	<script>
 		(function() {
+			document.getElementById('username').setAttribute('class','form-control');
+			document.getElementById('username').setAttribute('placeholder','User Name');
 			document.getElementById('email').setAttribute('class','form-control');
 			document.getElementById('email').setAttribute('placeholder','Email');
 			document.getElementById('password').setAttribute('class','form-control');

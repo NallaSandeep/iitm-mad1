@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TrackSelf | Administration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Free HTML5 Template by FREEHTML5.CO"/>
+    <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
+    <meta name="author" content="FREEHTML5.CO"/>
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'> -->
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="../../../static/css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="../../../static/css/icomoon.css">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="../../../static/css/bootstrap.css">
+    <!-- Superfish -->
+    <link rel="stylesheet" href="../../../static/css/superfish.css">
+
+    <link rel="stylesheet" href="../../../static/css/style.css">
+
+
+    <!-- Modernizr JS -->
+    <script src="../../../static/js/modernizr-2.6.2.min.js"></script>
+    <script type="text/javascript" src="https://s0-azure.assets-yammer.com/assets/platform_embed.js"></script>
+    <script type="text/javascript">
+		yam.connect.embedFeed({
+		  container: "#embedded-feed",
+		  network: "ftdi.com",
+		  feedType: "group",
+		  feedId: "12178968"
+		});
+
+    </script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="../../../static/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        #fh5co-logo a {
+        color: #ff5722;
+        text-transform: none;
+        font-family: Garamond;
+        font-size: 42px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="fh5co-wrapper">
+    <div id="fh5co-page">
+        <header id="fh5co-header-section" class="sticky-banner">
+            <div class="container">
+                <div class="nav-header">
+                    <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle dark"><i></i></a>
+                    <h1 id="fh5co-logo" class="col-sm-2"><a href="/">TrackSelf</a></h1>
+                    {% include 'login-state.html' %}
+                </div>
+            </div>
+        </header>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Administration</li>
+            </ol>
+        </nav>
+        <div id="fh5co-contact" class="animate-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="users-table" class="table">
+                            <thead>
+                            <th scope="col">ID</th>
+                            <th scope="col">User Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Active</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            </thead>
+                            <tbody>
+                            {% for user in users%}
+                            {{ user['roles'][0]['name'] }}
+                            <tr>
+                                <td>{{ user['id'] }}</a></td>
+                                <td>{{ user['username'] }}</td>
+                                <td>{{ user['email'] }}</td>
+                                <td>{{ user['active'] }}</td>
+                                <td><a href="/admin/users/{{ user['id'] }}/update"><i
+                                        class="glyphicon glyphicon-pencil"></i></a></td>
+                                <td><a href="/admin/users/{{ user['id'] }}/delete"><i
+                                        class="glyphicon glyphicon-trash"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button id="myButton" class="btn btn-primary" onclick="add_user()">Add User</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function add_user() {
+                location.href = "/admin/users/create";
+            };
+        </script>
+    </div>
+    <!-- END fh5co-page -->
+
+</div>
+<!-- END fh5co-wrapper -->
+
+<!-- jQuery -->
+
+
+<script src="../../../static/js/jquery.min.js"></script>
+<!-- jQuery Easing -->
+<script src="../../../static/js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="../../../static/js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="../../../static/js/jquery.waypoints.min.js"></script>
+<script src="../../../static/js/sticky.js"></script>
+
+<!-- Stellar -->
+<script src="../../../static/js/jquery.stellar.min.js"></script>
+<!-- Superfish -->
+<script src="../../../static/js/hoverIntent.js"></script>
+<script src="../../../static/js/superfish.js"></script>
+
+<!-- Google Map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
+<script src="../../../static/js/google_map.js"></script>
+
+<!-- Main JS -->
+<script src="../../../static/js/main.js"></script>
+</body>
+</html>
