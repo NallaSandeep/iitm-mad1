@@ -11,9 +11,10 @@ else
     echo "No Virtual env. Please run setup.sh first"
     exit N
 fi
-
+sleep 5s
 # Activate virtual env
 .env/Scripts/activate
 export ENV=development
 python app.py
-#deactivate
+sleep 10s
+deactivate
