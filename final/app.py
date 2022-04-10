@@ -64,7 +64,7 @@ def unauth(e):
 # Importing REST API controllers
 from application.api import *
 
-rest_api.add_resource(TrackerApi, '/api/tracker', '/api/trackers/<int:tracker_id>')
+rest_api.add_resource(TrackerApi, '/api/trackers', '/api/trackers/<int:tracker_id>')
 rest_api.add_resource(LogApi, '/api/trackers/<int:tracker_id>/log', '/api/trackers/<int:tracker_id>/logs/<int:log_id>')
 rest_api.add_resource(LogsApi, '/api/trackers/<int:tracker_id>/logs')
 

@@ -1,13 +1,11 @@
-import flask
 import requests
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import render_template, request, redirect, url_for
 from datetime import datetime, timedelta
 
 from flask_login import login_required
-from flask_security import roles_required, LoginForm, login_user
-from sqlalchemy.sql.functions import user
+from flask_security import roles_required
 
-from .models import User, Log, Tracker, Role
+from .models import User, Log, Tracker
 from .database import db
 from flask import current_app as app
 
@@ -58,7 +56,7 @@ def tracker_page(tracker_id):
 
 @app.route("/trackers/create", methods=["GET", "POST"])
 @login_required
-@roles_required('admin')
+# @roles_required('admin')
 def trackers_create():
     
     if request.method == 'GET':
@@ -76,7 +74,7 @@ def trackers_create():
 
 @app.route("/trackers/<string:tracker_id>/update", methods=["GET", "POST"])
 @login_required
-@roles_required('admin')
+# @roles_required('admin')
 def trackers_update(tracker_id):
     
     if request.method == 'GET':
@@ -94,7 +92,7 @@ def trackers_update(tracker_id):
 
 @app.route("/trackers/<string:tracker_id>/delete")
 @login_required
-@roles_required('admin')
+# @roles_required('admin')
 def trackers_delete(tracker_id):
     requests.delete(base_uri + 'api/trackers/' + tracker_id)
     return redirect(url_for('trackers_page'))
@@ -104,10 +102,12 @@ def trackers_delete(tracker_id):
 @login_required
 def tracker_details_page(tracker_id):
     last_days = int(request.args.get('lastdays',30))
-    filter_after = datetime.today() - timedelta(days=last_days)
+    today = datetime.today()
+    # print(today)
+    filter_after = today - timedelta(days=last_days)
     
     tracker = Tracker.query.filter_by(id=tracker_id).first()
-    logs = Log.query.filter_by(tracker=tracker_id).filter(Log.timestamp >= filter_after).order_by(Log.timestamp).all()
+    logs = Log.query.filter_by(tracker=tracker_id).filter(Log.timestamp <= today).filter(Log.timestamp >= filter_after).order_by(Log.timestamp).all()
     timestamps=[]
     values=[]
     for log in logs:

@@ -57,7 +57,7 @@ class TrackerApi(Resource):
             raise BusinessValidationError(400, 'TRACER001', 'Tracker Name is required and should be string.')
         if description is None or description.isnumeric():
             raise BusinessValidationError(400, 'TRACKER002', 'Tracker Description is required and should be string.')
-        if type is None or not (type=='boolean' or type == 'duration' or type == 'choice' or type == 'numeric'):
+        if type is None or not (type == 'boolean' or type == 'duration' or type == 'choice' or type == 'numeric'):
             raise BusinessValidationError(400, 'TRACKER003', 'Tracker Type is required and should be valid.')
         if settings.isnumeric():
             raise BusinessValidationError(400, 'TRACKER004', 'Tracker Settings Description should be string.')
@@ -76,11 +76,8 @@ class TrackerApi(Resource):
         user = db.session.query(Tracker).filter(Tracker.id == tracker_id).first()
         if user:
             db.session.delete(user)
+            db.session.query(Log).filter(Log.tracker == tracker_id).delete()
             db.session.commit()
-            logs = db.session.query(Log).filter(Log.tracker == tracker_id).all()
-            if logs:
-                db.session.delete(logs)
-                db.session.commit()
         else:
             raise InputValidationError(404, 'Tracker not found')
         return "Successfully Deleted", 200
